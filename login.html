@@ -1,0 +1,803 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login | FinSight</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+<style>
+:root{
+    --ink:#111827;
+    --muted:#667085;
+    --line:#e7e3f5;
+    --primary:#6d4df7;
+    --primary-2:#8b5cf6;
+    --green:#12b76a;
+    --blue:#3b82f6;
+    --shadow:0 18px 55px rgba(44,32,104,0.13);
+}
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+html,
+body{
+    width:100%;
+    height:100%;
+    overflow:hidden;
+}
+
+body{
+    font-family:'Inter',sans-serif;
+    color:var(--ink);
+    background:
+        radial-gradient(circle at top left, rgba(109,77,247,0.16), transparent 28%),
+        radial-gradient(circle at bottom right, rgba(24,199,184,0.10), transparent 25%),
+        linear-gradient(135deg,#f8f7ff 0%,#f5fbff 48%,#fff8fb 100%);
+    padding:10px;
+}
+
+.auth-page{
+    width:100%;
+    height:100%;
+    display:grid;
+    grid-template-columns:52% 48%;
+    border-radius:24px;
+    overflow:hidden;
+    background:rgba(255,255,255,0.58);
+    border:1px solid rgba(255,255,255,0.75);
+    box-shadow:var(--shadow);
+}
+
+/* LEFT */
+.left{
+    padding:clamp(20px,3vh,32px) clamp(28px,3.5vw,48px);
+    display:grid;
+    grid-template-rows:auto auto 1fr auto;
+    gap:clamp(12px,2vh,22px);
+    min-height:0;
+}
+
+.brand{
+    display:flex;
+    align-items:center;
+    gap:12px;
+}
+
+.logo{
+    width:40px;
+    height:40px;
+    border-radius:14px;
+    display:grid;
+    place-items:center;
+    color:#fff;
+    font-size:17px;
+    background:conic-gradient(from 220deg,#18c7b8,#5f73ff,#a64dff,#ff4da0,#18c7b8);
+    box-shadow:0 12px 26px rgba(109,77,247,0.22);
+}
+
+.brand h1{
+    font-size:24px;
+    line-height:1.05;
+}
+
+.brand p{
+    color:var(--muted);
+    font-size:12px;
+    margin-top:3px;
+}
+
+.hero h2{
+    font-size:clamp(38px,4.6vw,58px);
+    line-height:1.02;
+    letter-spacing:-1.8px;
+    font-weight:800;
+    margin-bottom:12px;
+}
+
+.hero h2 span{
+    color:var(--primary);
+}
+
+.hero p{
+    max-width:520px;
+    color:var(--muted);
+    font-size:clamp(14px,1.25vw,16px);
+    line-height:1.55;
+}
+
+.visual{
+    min-height:0;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    position:relative;
+}
+
+.orbit{
+    width:min(430px,88%);
+    aspect-ratio:1.45/1;
+    position:relative;
+    display:grid;
+    place-items:center;
+}
+
+.ring{
+    position:absolute;
+    border-radius:50%;
+    border:1.5px solid rgba(109,77,247,0.13);
+}
+
+.ring.one{
+    width:250px;
+    height:250px;
+}
+
+.ring.two{
+    width:178px;
+    height:178px;
+}
+
+.center-card{
+    width:126px;
+    height:126px;
+    border-radius:28px;
+    background:rgba(255,255,255,0.88);
+    border:1px solid rgba(255,255,255,0.90);
+    box-shadow:0 20px 45px rgba(109,77,247,0.14);
+    display:grid;
+    place-items:center;
+    position:relative;
+    animation:softFloat 3.4s ease-in-out infinite;
+}
+
+.center-card i{
+    color:var(--primary);
+    font-size:44px;
+}
+
+.chip{
+    position:absolute;
+    min-width:118px;
+    height:54px;
+    padding:8px 10px;
+    border-radius:18px;
+    background:rgba(255,255,255,0.90);
+    border:1px solid rgba(255,255,255,0.90);
+    box-shadow:0 14px 34px rgba(65,50,120,0.10);
+    display:flex;
+    align-items:center;
+    gap:9px;
+    animation:softFloat 3.8s ease-in-out infinite;
+}
+
+.chip i{
+    width:32px;
+    height:32px;
+    border-radius:11px;
+    display:grid;
+    place-items:center;
+    color:white;
+    font-size:13px;
+}
+
+.chip strong{
+    display:block;
+    font-size:12px;
+}
+
+.chip span{
+    display:block;
+    color:var(--muted);
+    font-size:10px;
+    margin-top:1px;
+}
+
+.income{
+    top:14%;
+    left:4%;
+}
+.income i{
+    background:linear-gradient(135deg,#34d399,#22c55e);
+}
+
+.budget{
+    top:42%;
+    right:2%;
+    animation-delay:.4s;
+}
+.budget i{
+    background:linear-gradient(135deg,#7c3aed,#8b5cf6);
+}
+
+.savings{
+    bottom:10%;
+    left:12%;
+    animation-delay:.8s;
+}
+.savings i{
+    background:linear-gradient(135deg,#60a5fa,#3b82f6);
+}
+
+.spark{
+    position:absolute;
+    width:8px;
+    height:8px;
+    border-radius:50%;
+    background:var(--primary);
+    opacity:.5;
+    animation:pulse 2.6s ease-in-out infinite;
+}
+
+.spark.a{ top:16%; right:28%; }
+.spark.b{ bottom:20%; right:24%; background:var(--blue); animation-delay:.6s; }
+.spark.c{ bottom:28%; left:26%; background:var(--green); animation-delay:1.1s; }
+
+.insights{
+    height:54px;
+    border-radius:18px;
+    background:rgba(255,255,255,0.76);
+    border:1px solid rgba(109,77,247,0.11);
+    box-shadow:0 12px 32px rgba(65,50,120,0.08);
+    display:flex;
+    align-items:center;
+    justify-content:space-around;
+    gap:10px;
+    padding:0 16px;
+}
+
+.insight{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    font-size:12px;
+    font-weight:800;
+    color:#1f2937;
+    white-space:nowrap;
+}
+
+.insight i{
+    color:var(--primary);
+    font-size:17px;
+}
+
+.dot{
+    width:5px;
+    height:5px;
+    border-radius:50%;
+    background:rgba(109,77,247,0.25);
+}
+
+/* RIGHT */
+.right{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:clamp(20px,3vh,34px) clamp(24px,3.4vw,48px);
+}
+
+.card{
+    width:min(440px,100%);
+    max-height:100%;
+    padding:clamp(24px,3vh,34px);
+    border-radius:28px;
+    background:rgba(255,255,255,0.93);
+    border:1px solid rgba(255,255,255,0.90);
+    box-shadow:0 18px 48px rgba(65,50,120,0.12);
+    position:relative;
+    overflow:hidden;
+}
+
+.card::before{
+    content:"";
+    position:absolute;
+    width:220px;
+    height:220px;
+    top:-105px;
+    right:-105px;
+    border-radius:50%;
+    background:radial-gradient(circle, rgba(109,77,247,0.16), transparent 68%);
+}
+
+.card-icon{
+    width:42px;
+    height:42px;
+    border-radius:14px;
+    display:grid;
+    place-items:center;
+    color:var(--primary);
+    background:#f3edff;
+    box-shadow:0 10px 20px rgba(109,77,247,0.12);
+    margin-left:auto;
+    margin-bottom:clamp(18px,2.8vh,28px);
+    position:relative;
+    z-index:2;
+    animation:softFloat 3.2s ease-in-out infinite;
+}
+
+.card h2{
+    margin-top: 0 !important;
+    font-size:clamp(32px,3.2vw,44px);
+    letter-spacing:-1px;
+    line-height:1.05;
+    margin-bottom:8px;
+    position:relative;
+    z-index:2;
+}
+
+.card > p{
+    color:var(--muted);
+    font-size:clamp(14px,1.2vw,16px);
+    margin-bottom:clamp(18px,2.6vh,28px);
+    position:relative;
+    z-index:2;
+}
+
+.flash{
+    padding:10px 12px;
+    border-radius:13px;
+    margin-bottom:12px;
+    font-size:13px;
+    font-weight:700;
+    position:relative;
+    z-index:2;
+}
+
+.flash-success{ background:#dcfce7; color:#166534; }
+.flash-danger{ background:#fee2e2; color:#991b1b; }
+
+.form-group{
+    margin-bottom:clamp(11px,1.7vh,16px);
+    position:relative;
+    z-index:2;
+}
+
+.form-group label{
+    display:block;
+    color:#475569;
+    font-size:13px;
+    font-weight:800;
+    margin-bottom:7px;
+}
+
+.input-wrap{
+    height:50px;
+    border:1px solid var(--line);
+    border-radius:15px;
+    background:white;
+    display:flex;
+    align-items:center;
+    gap:11px;
+    padding:0 14px;
+    transition:border-color .2s ease, box-shadow .2s ease;
+}
+
+.input-wrap:focus-within{
+    border-color:#8b5cf6;
+    box-shadow:0 0 0 4px rgba(109,77,247,0.10);
+}
+
+.input-wrap i{
+    color:var(--primary-2);
+    font-size:17px;
+}
+
+.input-wrap input{
+    width:100%;
+    border:0;
+    outline:0;
+    background:transparent;
+    font-size:14px;
+    color:var(--ink);
+}
+
+.input-wrap input::placeholder{
+    color:#94a3b8;
+}
+
+.password-toggle{
+    width:30px;
+    height:30px;
+    border:0;
+    border-radius:10px;
+    background:transparent;
+    color:var(--primary-2);
+    cursor:pointer;
+    display:grid;
+    place-items:center;
+    font-size:15px;
+    flex:0 0 auto;
+}
+
+.password-toggle:hover{
+    background:#f3edff;
+}
+
+.row{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:12px;
+    margin:0 0 clamp(12px,1.8vh,18px);
+    position:relative;
+    z-index:2;
+}
+
+.remember{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    color:#667085;
+    font-size:13px;
+}
+
+.remember input{
+    width:15px;
+    height:15px;
+    accent-color:#7c3aed;
+}
+
+.row a{
+    color:#5b35d5;
+    text-decoration:none;
+    font-size:13px;
+    font-weight:700;
+}
+
+.btn{
+    width:100%;
+    height:52px;
+    border:0;
+    border-radius:15px;
+    color:white;
+    font-size:15px;
+    font-weight:800;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:10px;
+    background:linear-gradient(135deg,#6d4df7,#8b5cf6);
+    box-shadow:0 14px 28px rgba(109,77,247,0.23);
+    cursor:pointer;
+    position:relative;
+    z-index:2;
+    transition:transform .2s ease, box-shadow .2s ease;
+}
+
+.btn:hover{
+    transform:translateY(-2px);
+    box-shadow:0 18px 34px rgba(109,77,247,0.28);
+}
+
+.switch{
+    margin-top:clamp(16px,2.3vh,24px);
+    text-align:center;
+    color:#667085;
+    font-size:14px;
+    position:relative;
+    z-index:2;
+}
+
+.switch a{
+    color:#5b35d5;
+    text-decoration:none;
+    font-weight:800;
+}
+
+.privacy{
+    margin-top:clamp(14px,2.1vh,22px);
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    gap:9px;
+    color:#667085;
+    font-size:13px;
+    position:relative;
+    z-index:2;
+}
+
+.privacy i{
+    color:var(--primary);
+}
+
+@keyframes softFloat{
+    0%,100%{ transform:translateY(0); }
+    50%{ transform:translateY(-4px); }
+}
+
+@keyframes pulse{
+    0%,100%{ transform:scale(.9); opacity:.45; }
+    50%{ transform:scale(1.2); opacity:.9; }
+}
+
+/* Smaller laptop screens */
+@media(max-height:720px){
+    body{ padding:8px; }
+    .auth-page{
+        height:calc(100vh - 16px);
+    }
+    .left{
+        padding:20px 34px 18px;
+        gap:10px;
+    }
+    .logo{
+        width:36px;
+        height:36px;
+    }
+    .brand h1{
+        font-size:22px;
+    }
+    .hero h2{
+        font-size:40px;
+        margin-bottom:8px;
+    }
+    .hero p{
+        font-size:13px;
+        line-height:1.45;
+    }
+    .visual{
+        transform:scale(.86);
+    }
+    .insights{
+        height:48px;
+    }
+    .right{
+        padding:20px 34px;
+    }
+    .card{
+        padding:24px 30px;
+    }
+    .card-icon{
+        width:38px;
+        height:38px;
+        margin-bottom:14px;
+    }
+    .card h2{
+    margin-top: 0 !important;
+        font-size:32px;
+    }
+    .card > p{
+        font-size:13px;
+        margin-bottom:16px;
+    }
+    .input-wrap{
+        height:46px;
+    }
+    .btn{
+        height:48px;
+    }
+    .privacy{
+        display:none;
+    }
+}
+
+/* Mobile/tablet */
+@media(max-width:900px){
+    html, body{
+        height:auto;
+        overflow:auto;
+    }
+    body{
+        padding:0;
+    }
+    .auth-page{
+        height:auto;
+        min-height:100vh;
+        grid-template-columns:1fr;
+        border-radius:0;
+    }
+    .left,
+    .right{
+        padding:26px 22px;
+    }
+    .visual{
+        min-height:260px;
+    }
+    .right{
+        padding-top:0;
+    }
+}
+
+/* DARK MODE SUPPORT */
+body.dark-mode{
+    background:
+        radial-gradient(circle at top left, rgba(109,77,247,0.20), transparent 34%),
+        linear-gradient(135deg,#080b14 0%,#111827 55%,#1e1b2e 100%);
+    color:#f8fafc;
+}
+
+body.dark-mode .auth-page,
+body.dark-mode .card,
+body.dark-mode .chip,
+body.dark-mode .insights,
+body.dark-mode .input-wrap{
+    background:rgba(255,255,255,0.06);
+    border-color:rgba(255,255,255,0.12);
+    color:#f8fafc;
+}
+
+body.dark-mode h1,
+body.dark-mode h2,
+body.dark-mode strong,
+body.dark-mode label,
+body.dark-mode .insight{
+    color:#f8fafc;
+}
+
+body.dark-mode p,
+body.dark-mode span,
+body.dark-mode .switch,
+body.dark-mode .privacy,
+body.dark-mode .remember{
+    color:#cbd5e1;
+}
+
+body.dark-mode .input-wrap input{
+    color:#f8fafc;
+}
+
+body.dark-mode .input-wrap input::placeholder{
+    color:#94a3b8;
+}
+
+.remember-only{
+    justify-content:flex-start !important;
+}
+</style>
+</head>
+
+<body>
+<main class="auth-page">
+
+    <section class="left">
+        <div class="brand">
+            <div class="logo"><i class="fas fa-shield-halved"></i></div>
+            <div>
+                <h1>FinSight</h1>
+                <p>Personal finance workspace</p>
+            </div>
+        </div>
+
+        <div class="hero">
+            <h2>Stay close to your <span>money, every day.</span></h2>
+            <p>FinSight helps you review income, spending, budgets, and forecasts in one simple place.</p>
+        </div>
+
+        <div class="visual" aria-hidden="true">
+            <div class="orbit">
+                <div class="ring one"></div>
+                <div class="ring two"></div>
+
+                <div class="spark a"></div>
+                <div class="spark b"></div>
+                <div class="spark c"></div>
+
+                <div class="chip income">
+                    <i class="fas fa-money-bill-trend-up"></i>
+                    <div>
+                        <strong>Income</strong>
+                        <span>Track earnings</span>
+                    </div>
+                </div>
+
+                <div class="chip budget">
+                    <i class="fas fa-wallet"></i>
+                    <div>
+                        <strong>Budget</strong>
+                        <span>Plan spending</span>
+                    </div>
+                </div>
+
+                <div class="chip savings">
+                    <i class="fas fa-piggy-bank"></i>
+                    <div>
+                        <strong>Savings</strong>
+                        <span>Build habits</span>
+                    </div>
+                </div>
+
+                <div class="center-card">
+                    <i class="fas fa-chart-column"></i>
+                </div>
+            </div>
+        </div>
+
+        <div class="insights">
+            <div class="insight"><i class="fas fa-chart-line"></i>Track spending</div>
+            <div class="dot"></div>
+            <div class="insight"><i class="fas fa-clock-rotate-left"></i>Forecast savings</div>
+            <div class="dot"></div>
+            <div class="insight"><i class="fas fa-calendar-check"></i>Manage budgets</div>
+        </div>
+    </section>
+
+    <section class="right">
+        <div class="card">
+            <h2>Welcome back</h2>
+            <p>Log in to review your latest financial activity.</p>
+
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        <div class="flash flash-{{ category }}">{{ message }}</div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+
+            <form method="POST">
+                <div class="form-group">
+                    <label>Email</label>
+                    <div class="input-wrap">
+                        <i class="fas fa-envelope"></i>
+                        <input type="email" name="email" placeholder="you@example.com" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Password</label>
+                    <div class="input-wrap">
+                        <i class="fas fa-lock"></i>
+                        <input type="password" id="passwordInput" name="password" placeholder="Enter your password" required>
+                        <button type="button" class="password-toggle" onclick="togglePassword()" aria-label="Show or hide password">
+                            <i id="passwordToggleIcon" class="fas fa-eye"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="row remember-only">
+                    <label class="remember">
+                        <input type="checkbox" name="remember_me">
+                        <span>Remember me</span>
+                    </label>
+                </div>
+
+                <button type="submit" class="btn">
+                    <i class="fas fa-arrow-right-to-bracket"></i>
+                    Sign In
+                </button>
+            </form>
+
+            <div class="switch">
+                First time here? <a href="/register">Create your account</a>
+            </div>
+
+            <div class="privacy">
+                <i class="fas fa-shield-halved"></i>
+                <span>Your workspace is private and protected.</span>
+            </div>
+        </div>
+    </section>
+
+</main>
+
+<script>
+(function () {
+    const savedTheme = localStorage.getItem('FinSight-theme');
+    if (savedTheme === 'dark') {
+        document.body.classList.add('dark-mode');
+    }
+})();
+
+function togglePassword(){
+    const input = document.getElementById('passwordInput');
+    const icon = document.getElementById('passwordToggleIcon');
+
+    if (!input || !icon) return;
+
+    if (input.type === 'password') {
+        input.type = 'text';
+        icon.className = 'fas fa-eye-slash';
+    } else {
+        input.type = 'password';
+        icon.className = 'fas fa-eye';
+    }
+}
+</script>
+</body>
+</html>

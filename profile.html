@@ -1,0 +1,678 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- =========================================
+         PAGE SETUP / BROWSER METADATA
+         ========================================= -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile | FinSight</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+<style>
+/* =========================================
+   DESIGN TOKENS
+   ========================================= */
+:root{
+    --ink:#111827;
+    --muted:#6b7280;
+    --line:#e9e6f5;
+    --primary:#6d4df7;
+    --primary-soft:#f3edff;
+    --green:#16a34a;
+    --green-soft:#dcfce7;
+    --red:#dc2626;
+    --red-soft:#fee2e2;
+    --blue:#4f46e5;
+    --orange:#f97316;
+    --card:#ffffff;
+    --shadow:0 24px 80px rgba(44,32,104,0.16);
+    --card-shadow:0 18px 50px rgba(65,50,120,0.12);
+}
+
+/* =========================================
+   GLOBAL RESET
+   ========================================= */
+*{ margin:0; padding:0; box-sizing:border-box; }
+a{ color:inherit; text-decoration:none; }
+
+body{
+    min-height:100vh;
+    font-family:'Inter',sans-serif;
+    color:var(--ink);
+    background:
+        radial-gradient(circle at top left, rgba(109,77,247,0.20), transparent 32%),
+        radial-gradient(circle at bottom right, rgba(24,199,184,0.14), transparent 30%),
+        linear-gradient(135deg,#f8f7ff 0%,#f2fbff 52%,#fff8fb 100%);
+    padding:18px;
+}
+
+.shell{
+    max-width:1180px;
+    margin:auto;
+    min-height:calc(100vh - 36px);
+    border-radius:28px;
+    background:rgba(255,255,255,0.52);
+    border:1px solid rgba(255,255,255,0.72);
+    box-shadow:var(--shadow);
+    padding:28px;
+}
+
+/* =========================================
+   HEADER
+   ========================================= */
+.topbar{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:18px;
+    margin-bottom:24px;
+}
+
+.brand{
+    display:flex;
+    align-items:center;
+    gap:14px;
+}
+
+.brand-mark{
+    width:48px;
+    height:48px;
+    border-radius:16px;
+    display:grid;
+    place-items:center;
+    color:white;
+    background:linear-gradient(135deg,#6d4df7,#8b5cf6);
+    box-shadow:0 16px 34px rgba(109,77,247,0.28);
+    animation:softFloat 3.2s ease-in-out infinite;
+}
+
+.brand h1{
+    font-size:25px;
+    line-height:1.1;
+}
+
+.muted{
+    color:var(--muted);
+    font-size:13px;
+    line-height:1.6;
+}
+
+.btn{
+    min-height:42px;
+    border:0;
+    padding:0 16px;
+    border-radius:13px;
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    gap:8px;
+    cursor:pointer;
+    color:white;
+    font-weight:800;
+    font-size:13px;
+    background:linear-gradient(135deg,#6d4df7,#8b5cf6);
+    box-shadow:0 12px 24px rgba(109,77,247,0.20);
+    transition:transform .22s ease, box-shadow .22s ease;
+}
+
+.btn:hover{
+    transform:translateY(-2px);
+    box-shadow:0 18px 34px rgba(109,77,247,0.25);
+}
+
+.btn-secondary{
+    color:var(--ink);
+    background:rgba(255,255,255,0.82);
+    border:1px solid var(--line);
+    box-shadow:none;
+}
+
+/* =========================================
+   LAYOUT
+   ========================================= */
+.profile-layout{
+    display:grid;
+    grid-template-columns:1.1fr 0.9fr;
+    gap:22px;
+    align-items:start;
+}
+
+.left-stack,
+.right-stack{
+    display:grid;
+    gap:18px;
+}
+
+.card{
+    position:relative;
+    overflow:hidden;
+    background:rgba(255,255,255,0.86);
+    border:1px solid rgba(255,255,255,0.78);
+    border-radius:24px;
+    box-shadow:var(--card-shadow);
+    padding:24px;
+    transition:transform .24s ease, box-shadow .24s ease, border-color .24s ease;
+}
+
+.card:hover{
+    transform:translateY(-3px);
+    box-shadow:0 24px 60px rgba(65,50,120,0.17);
+    border-color:rgba(109,77,247,0.18);
+}
+
+.card h3{
+    font-size:18px;
+    margin-bottom:16px;
+}
+
+.card-corner-icon{
+    position:absolute;
+    top:18px;
+    right:18px;
+    width:44px;
+    height:44px;
+    border-radius:16px;
+    display:grid;
+    place-items:center;
+    color:#6d4df7;
+    background:linear-gradient(135deg,rgba(109,77,247,.14),rgba(139,92,246,.05));
+    box-shadow:0 12px 24px rgba(109,77,247,.12);
+    animation:softFloat 3.3s ease-in-out infinite;
+}
+
+.card-corner-icon.green{
+    color:var(--green);
+    background:linear-gradient(135deg,rgba(22,163,74,.15),rgba(22,163,74,.05));
+}
+
+.card-corner-icon.orange{
+    color:var(--orange);
+    background:linear-gradient(135deg,rgba(249,115,22,.15),rgba(249,115,22,.05));
+}
+
+/* =========================================
+   PROFILE SUMMARY
+   ========================================= */
+.profile-head{
+    display:flex;
+    align-items:center;
+    gap:18px;
+    margin-bottom:22px;
+    padding-right:52px;
+}
+
+.avatar{
+    width:82px;
+    height:82px;
+    border-radius:26px;
+    display:grid;
+    place-items:center;
+    color:white;
+    font-size:32px;
+    font-weight:800;
+    background:linear-gradient(135deg,#1fb6a6,#6d4df7);
+    box-shadow:0 18px 38px rgba(109,77,247,0.20);
+}
+
+.profile-head h2{
+    font-size:28px;
+    margin-bottom:6px;
+}
+
+.email-line{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    color:var(--muted);
+    font-size:13px;
+    line-height:1.5;
+}
+
+.email-line i{ color:var(--primary); }
+
+.stats-grid{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:12px;
+}
+
+.stat-card{
+    position:relative;
+    padding:17px;
+    border-radius:18px;
+    border:1px solid var(--line);
+    background:rgba(255,255,255,0.66);
+}
+
+.stat-card span{
+    display:block;
+    color:var(--muted);
+    font-size:12px;
+    font-weight:800;
+    margin-bottom:8px;
+}
+
+.stat-card strong{
+    font-size:23px;
+    line-height:1.2;
+}
+
+.stat-card i{
+    position:absolute;
+    right:14px;
+    top:14px;
+    color:#6d4df7;
+    opacity:.42;
+}
+
+.positive{ color:var(--green); }
+.negative{ color:var(--red); }
+
+/* =========================================
+   INSIGHT CARDS
+   ========================================= */
+.account-health{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:12px;
+}
+
+.health-item{
+    padding:16px;
+    border-radius:18px;
+    border:1px solid var(--line);
+    background:rgba(255,255,255,0.62);
+}
+
+.health-item i{
+    width:38px;
+    height:38px;
+    border-radius:14px;
+    display:grid;
+    place-items:center;
+    color:white;
+    margin-bottom:10px;
+    background:linear-gradient(135deg,#6d4df7,#8b5cf6);
+}
+
+.health-item strong{
+    display:block;
+    font-size:14px;
+    margin-bottom:4px;
+}
+
+.tips{
+    display:grid;
+    gap:11px;
+}
+
+.tip{
+    display:flex;
+    gap:11px;
+    padding:14px;
+    border-radius:16px;
+    background:#f6f3ff;
+    color:#423262;
+    font-size:13px;
+    line-height:1.5;
+}
+
+.tip i{
+    color:var(--primary);
+    margin-top:2px;
+}
+
+/* =========================================
+   FORM
+   ========================================= */
+.form-group{
+    margin-bottom:15px;
+}
+
+.form-group label{
+    display:block;
+    color:var(--muted);
+    font-size:12px;
+    font-weight:800;
+    margin-bottom:7px;
+}
+
+.form-input{
+    width:100%;
+    height:46px;
+    border:1px solid var(--line);
+    border-radius:14px;
+    padding:0 13px;
+    outline:0;
+    background:#fff;
+    color:var(--ink);
+    transition:border-color .2s ease, box-shadow .2s ease;
+}
+
+.form-input:focus{
+    border-color:#8b5cf6;
+    box-shadow:0 0 0 4px rgba(109,77,247,0.10);
+}
+
+.submit{
+    width:100%;
+    height:46px;
+    margin-top:4px;
+}
+
+.security-list{
+    margin-top:18px;
+    display:grid;
+    gap:10px;
+}
+
+.security-item{
+    display:flex;
+    align-items:flex-start;
+    gap:10px;
+    padding:12px;
+    border-radius:15px;
+    background:rgba(109,77,247,0.06);
+    color:#423262;
+    font-size:13px;
+    line-height:1.5;
+}
+
+.security-item i{
+    color:var(--primary);
+    margin-top:2px;
+}
+
+/* =========================================
+   FLASH MESSAGES
+   ========================================= */
+.flash{
+    padding:12px 14px;
+    border-radius:14px;
+    margin-bottom:14px;
+    font-size:13px;
+    font-weight:700;
+}
+
+.flash-success{ background:var(--green-soft); color:#166534; }
+.flash-danger{ background:var(--red-soft); color:#991b1b; }
+
+/* =========================================
+   ANIMATIONS
+   ========================================= */
+@keyframes softFloat{
+    0%,100%{ transform:translateY(0); }
+    50%{ transform:translateY(-4px); }
+}
+
+/* =========================================
+   RESPONSIVE DESIGN
+   ========================================= */
+@media(max-width:960px){
+    .profile-layout{
+        grid-template-columns:1fr;
+    }
+}
+
+@media(max-width:700px){
+    body{ padding:0; }
+    .shell{
+        min-height:100vh;
+        border-radius:0;
+        padding:22px;
+    }
+    .topbar{
+        flex-direction:column;
+        align-items:flex-start;
+    }
+    .stats-grid,
+    .account-health{
+        grid-template-columns:1fr;
+    }
+    .profile-head{
+        align-items:flex-start;
+    }
+}
+
+/* =========================================
+   DARK MODE STYLES
+   ========================================= */
+body.dark-mode{
+    background:
+        radial-gradient(circle at top left, rgba(109,77,247,0.20), transparent 34%),
+        linear-gradient(135deg,#080b14 0%,#111827 55%,#1e1b2e 100%);
+    color:#f8fafc;
+}
+
+body.dark-mode .shell,
+body.dark-mode .card,
+body.dark-mode .btn-secondary,
+body.dark-mode .stat-card,
+body.dark-mode .health-item,
+body.dark-mode .tip,
+body.dark-mode .security-item{
+    background:rgba(255,255,255,0.06);
+    border-color:rgba(255,255,255,0.12);
+    color:#f8fafc;
+}
+
+body.dark-mode h1,
+body.dark-mode h2,
+body.dark-mode h3,
+body.dark-mode strong,
+body.dark-mode label{
+    color:#f8fafc;
+}
+
+body.dark-mode .muted,
+body.dark-mode p,
+body.dark-mode span{
+    color:#cbd5e1;
+}
+
+body.dark-mode input{
+    background:rgba(15,23,42,0.92);
+    border-color:rgba(255,255,255,0.14);
+    color:#f8fafc;
+}
+
+body.dark-mode input::placeholder{
+    color:#94a3b8;
+}
+</style>
+</head>
+
+<body>
+<main class="shell">
+    <!-- =========================================
+         HEADER
+         ========================================= -->
+    <div class="topbar">
+        <div class="brand">
+            <div class="brand-mark"><i class="fas fa-user-shield"></i></div>
+            <div>
+                <h1>Profile Settings</h1>
+                <p class="muted">Manage your account details and security preferences.</p>
+            </div>
+        </div>
+
+        <a href="/dashboard" class="btn btn-secondary"><i class="fas fa-arrow-left"></i>Back to Dashboard</a>
+    </div>
+
+    <!-- =========================================
+         FLASH MESSAGES FROM FLASK
+         ========================================= -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="flash flash-{{ category }}">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
+    <!-- =========================================
+         PROFILE DETAILS AND ACCOUNT SETTINGS
+         ========================================= -->
+    <section class="profile-layout">
+
+        <div class="left-stack">
+            <div class="card">
+                <div class="card-corner-icon"><i class="fas fa-id-card"></i></div>
+
+                <div class="profile-head">
+                    <div class="avatar">{{ username[0]|upper }}</div>
+
+                    <div>
+                        <h2>{{ username }}</h2>
+                        <p class="email-line">
+                            <i class="fas fa-envelope"></i>
+                            {{ email }}
+                        </p>
+                        <p class="muted">Personal finance activity summary for your FinSight account.</p>
+                    </div>
+                </div>
+
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <i class="fas fa-arrow-right-arrow-left"></i>
+                        <span>Total Transactions</span>
+                        <strong>{{ total_tx }}</strong>
+                    </div>
+
+                    <div class="stat-card">
+                        <i class="fas fa-sack-dollar"></i>
+                        <span>Annual Income</span>
+                        <strong>${{ "%.2f"|format(total_income) }}</strong>
+                    </div>
+
+                    <div class="stat-card">
+                        <i class="fas fa-receipt"></i>
+                        <span>Annual Expenses</span>
+                        <strong>${{ "%.2f"|format(total_expenses) }}</strong>
+                    </div>
+
+                    <div class="stat-card">
+                        <i class="fas fa-piggy-bank"></i>
+                        <span>Annual Net Savings</span>
+                        <strong class="{% if savings >= 0 %}positive{% else %}negative{% endif %}">
+                            ${{ "%.2f"|format(savings) }}
+                        </strong>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-corner-icon green"><i class="fas fa-chart-line"></i></div>
+                <h3>Account Overview</h3>
+
+                <div class="account-health">
+                    <div class="health-item">
+                        <i class="fas fa-database"></i>
+                        <strong>Data Tracked</strong>
+                        <p class="muted">Transactions and annual totals are linked to your profile.</p>
+                    </div>
+
+                    <div class="health-item">
+                        <i class="fas fa-lock"></i>
+                        <strong>Protected Access</strong>
+                        <p class="muted">Your profile is protected by authenticated session access.</p>
+                    </div>
+
+                    <div class="health-item">
+                        <i class="fas fa-chart-pie"></i>
+                        <strong>Financial Snapshot</strong>
+                        <p class="muted">Income, expenses, and savings are summarized in one view.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="right-stack">
+            <div class="card">
+                <div class="card-corner-icon orange"><i class="fas fa-key"></i></div>
+                <h3>Change Password</h3>
+                <p class="muted" style="margin-bottom:16px;">Update your password to keep your FinSight account secure.</p>
+
+                <form method="POST">
+                    <div class="form-group">
+                        <label>Current Password</label>
+                        <input type="password" name="current_password" class="form-input" placeholder="Enter current password" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>New Password</label>
+                        <input type="password" name="new_password" class="form-input" placeholder="At least 6 characters" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Confirm New Password</label>
+                        <input type="password" name="confirm_password" class="form-input" placeholder="Repeat new password" required>
+                    </div>
+
+                    <button type="submit" class="btn submit"><i class="fas fa-key"></i>Update Password</button>
+                </form>
+
+                <div class="security-list">
+                    <div class="security-item">
+                        <i class="fas fa-circle-check"></i>
+                        <span>Use a password that is unique to this account.</span>
+                    </div>
+
+                    <div class="security-item">
+                        <i class="fas fa-shield-halved"></i>
+                        <span>Avoid reusing passwords from other financial or personal apps.</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-corner-icon"><i class="fas fa-lightbulb"></i></div>
+                <h3>Profile Notes</h3>
+
+                <div class="tips">
+                    <div class="tip">
+                        <i class="fas fa-circle-info"></i>
+                        <span>Annual totals are based on all transactions currently stored in your FinSight account.</span>
+                    </div>
+
+                    <div class="tip">
+                        <i class="fas fa-arrow-trend-up"></i>
+                        <span>Keep transactions updated regularly to improve dashboard insights and financial forecasts.</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </section>
+</main>
+
+<!-- =========================================
+     JAVASCRIPT SECTION
+     ========================================= -->
+<script>
+(function () {
+    const savedTheme = localStorage.getItem('FinSight-theme');
+
+    if (savedTheme === 'dark') {
+        document.body.classList.add('dark-mode');
+    }
+
+    const themeToggle = document.getElementById('themeToggle');
+
+    if (themeToggle) {
+        themeToggle.addEventListener('click', function () {
+            document.body.classList.toggle('dark-mode');
+
+            if (document.body.classList.contains('dark-mode')) {
+                localStorage.setItem('FinSight-theme', 'dark');
+            } else {
+                localStorage.setItem('FinSight-theme', 'light');
+            }
+        });
+    }
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Report | FinSight</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+<style>
+:root{
+    --ink:#111827;
+    --muted:#667085;
+    --line:#e6e1f5;
+    --primary:#7652f6;
+    --green:#0ca66a;
+    --red:#e11d48;
+    --blue:#4f46e5;
+    --shadow:0 14px 36px rgba(44,32,104,0.09);
+}
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    min-height:100vh;
+    font-family:'Inter',sans-serif;
+    color:var(--ink);
+    background:
+        radial-gradient(circle at top left, rgba(118,82,246,0.12), transparent 30%),
+        radial-gradient(circle at bottom right, rgba(20,184,166,0.08), transparent 28%),
+        linear-gradient(135deg,#f8f7ff 0%,#f5fbff 52%,#fff8fb 100%);
+    padding:14px;
+}
+
+.report-shell{
+    max-width:1050px;
+    margin:0 auto;
+    background:rgba(255,255,255,0.68);
+    border:1px solid rgba(255,255,255,0.82);
+    border-radius:22px;
+    box-shadow:var(--shadow);
+    padding:18px;
+}
+
+/* small popup only */
+.success-toast{
+    position:fixed;
+    top:16px;
+    right:16px;
+    z-index:20;
+    display:flex;
+    align-items:center;
+    gap:8px;
+    padding:10px 14px;
+    border-radius:14px;
+    background:rgba(255,255,255,0.96);
+    border:1px solid #d7f7e7;
+    box-shadow:0 12px 28px rgba(16,166,106,0.15);
+    color:#067647;
+    font-weight:800;
+    font-size:13px;
+    animation:fadeToast .45s ease, hideToast .45s ease 4s forwards;
+}
+
+.success-toast i{
+    width:24px;
+    height:24px;
+    border-radius:50%;
+    display:grid;
+    place-items:center;
+    color:#fff;
+    background:var(--green);
+    font-size:12px;
+}
+
+/* header */
+.report-header{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:14px;
+    margin-bottom:14px;
+}
+
+.brand{
+    display:flex;
+    align-items:center;
+    gap:11px;
+}
+
+.logo{
+    width:40px;
+    height:40px;
+    border-radius:14px;
+    display:grid;
+    place-items:center;
+    color:#fff;
+    font-size:17px;
+    background:conic-gradient(from 220deg,#18c7b8,#5f73ff,#a64dff,#ff4da0,#18c7b8);
+    box-shadow:0 10px 24px rgba(118,82,246,0.18);
+}
+
+.brand h1{
+    font-size:24px;
+    line-height:1.05;
+    letter-spacing:-0.5px;
+}
+
+.brand p{
+    color:var(--muted);
+    font-size:12.5px;
+    margin-top:4px;
+}
+
+.actions{
+    display:flex;
+    align-items:center;
+    gap:8px;
+}
+
+.btn{
+    height:36px;
+    padding:0 13px;
+    border-radius:12px;
+    border:1px solid var(--line);
+    background:rgba(255,255,255,0.92);
+    color:var(--ink);
+    text-decoration:none;
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    gap:7px;
+    font-size:12.5px;
+    font-weight:800;
+    cursor:pointer;
+}
+
+.btn-primary{
+    border:0;
+    color:#fff;
+    background:linear-gradient(135deg,#7652f6,#8b5cf6);
+    box-shadow:0 10px 22px rgba(118,82,246,0.20);
+}
+
+/* intro: smaller */
+.intro{
+    background:rgba(255,255,255,0.86);
+    border:1px solid var(--line);
+    border-radius:18px;
+    padding:16px 18px;
+    margin-bottom:12px;
+}
+
+.badge{
+    display:inline-flex;
+    align-items:center;
+    gap:7px;
+    padding:6px 10px;
+    border-radius:999px;
+    background:#f2edff;
+    color:#5f3ee8;
+    font-size:11.5px;
+    font-weight:800;
+    margin-bottom:9px;
+}
+
+.intro h2{
+    font-size:22px;
+    line-height:1.15;
+    letter-spacing:-0.5px;
+    margin-bottom:6px;
+}
+
+.intro p{
+    color:var(--muted);
+    font-size:13.5px;
+    line-height:1.5;
+    max-width:790px;
+}
+
+/* summary cards: much smaller */
+.summary-grid{
+    display:grid;
+    grid-template-columns:repeat(4,minmax(0,1fr));
+    gap:10px;
+    margin-bottom:12px;
+}
+
+.metric-card{
+    min-height:112px;
+    background:rgba(255,255,255,0.88);
+    border:1px solid var(--line);
+    border-radius:18px;
+    box-shadow:0 10px 24px rgba(65,50,120,0.06);
+    padding:14px;
+    position:relative;
+    overflow:hidden;
+}
+
+.metric-card::before{
+    content:"";
+    position:absolute;
+    left:0;
+    top:0;
+    height:4px;
+    width:100%;
+    background:var(--primary);
+}
+
+.metric-card.income::before{ background:var(--green); }
+.metric-card.expense::before{ background:var(--red); }
+.metric-card.savings::before{ background:var(--blue); }
+.metric-card.rate::before{ background:var(--primary); }
+
+.metric-top{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:8px;
+    margin-bottom:9px;
+}
+
+.metric-top span{
+    color:var(--muted);
+    font-size:12.5px;
+    font-weight:800;
+}
+
+.metric-top i{
+    width:34px;
+    height:34px;
+    border-radius:12px;
+    display:grid;
+    place-items:center;
+    font-size:14px;
+}
+
+.income i{ color:var(--green); background:#dcfce7; }
+.expense i{ color:var(--red); background:#ffe4ec; }
+.savings i{ color:var(--blue); background:#e0e7ff; }
+.rate i{ color:var(--primary); background:#f2edff; }
+
+.metric-value{
+    font-size:23px;
+    line-height:1;
+    letter-spacing:-0.5px;
+    font-weight:800;
+    word-break:break-word;
+}
+
+.metric-note{
+    margin-top:7px;
+    color:var(--muted);
+    font-size:11.5px;
+    font-weight:700;
+}
+
+.positive{ color:var(--green); }
+.negative{ color:var(--red); }
+.primary-text{ color:var(--primary); }
+
+/* lower section: financial insight is NOT a separate card */
+.bottom-grid{
+    display:grid;
+    grid-template-columns:1fr;
+    gap:10px;
+}
+
+.overview-card{
+    background:rgba(255,255,255,0.88);
+    border:1px solid var(--line);
+    border-radius:18px;
+    box-shadow:0 10px 24px rgba(65,50,120,0.06);
+    padding:16px;
+}
+
+.section-head{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    margin-bottom:12px;
+}
+
+.section-head h3{
+    font-size:18px;
+    letter-spacing:-0.35px;
+}
+
+.section-head i{
+    width:34px;
+    height:34px;
+    border-radius:12px;
+    display:grid;
+    place-items:center;
+    color:var(--primary);
+    background:#f2edff;
+    font-size:14px;
+}
+
+.overview-rows{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:10px;
+}
+
+.info-row{
+    padding:11px 12px;
+    border-radius:13px;
+    background:#fbfaff;
+    border:1px solid var(--line);
+}
+
+.info-row span{
+    display:block;
+    color:var(--muted);
+    font-size:12px;
+    font-weight:700;
+    margin-bottom:5px;
+}
+
+.info-row strong{
+    font-size:14px;
+}
+
+
+.category-list{
+    margin-top:12px;
+    display:grid;
+    gap:8px;
+}
+
+.category-item{
+    display:grid;
+    grid-template-columns:1fr auto auto;
+    gap:10px;
+    align-items:center;
+    padding:10px 12px;
+    border-radius:13px;
+    background:#fbfaff;
+    border:1px solid var(--line);
+    font-size:13px;
+}
+
+.category-item strong{
+    font-size:13px;
+}
+
+.category-item span{
+    color:var(--muted);
+    font-weight:700;
+}
+
+/* insight line only */
+.insight-line{
+    display:flex;
+    align-items:flex-start;
+    gap:10px;
+    padding:13px 15px;
+    border-radius:16px;
+    background:rgba(242,237,255,0.76);
+    border:1px solid rgba(118,82,246,0.14);
+    color:#423262;
+    font-size:13.5px;
+    line-height:1.55;
+}
+
+.insight-line i{
+    color:var(--primary);
+    margin-top:2px;
+    flex:0 0 auto;
+}
+
+.footer{
+    margin-top:10px;
+    text-align:center;
+    color:var(--muted);
+    font-size:11.5px;
+}
+
+/* dark mode */
+body.dark-mode{
+    background:
+        radial-gradient(circle at top left, rgba(118,82,246,0.20), transparent 34%),
+        linear-gradient(135deg,#080b14 0%,#111827 55%,#1e1b2e 100%);
+    color:#f8fafc;
+}
+
+body.dark-mode .report-shell,
+body.dark-mode .intro,
+body.dark-mode .metric-card,
+body.dark-mode .overview-card,
+body.dark-mode .btn,
+body.dark-mode .info-row,
+body.dark-mode .insight-line{
+    background:rgba(255,255,255,0.06);
+    border-color:rgba(255,255,255,0.12);
+    color:#f8fafc;
+}
+
+body.dark-mode p,
+body.dark-mode span,
+body.dark-mode .brand p,
+body.dark-mode .metric-note,
+body.dark-mode .footer{
+    color:#cbd5e1;
+}
+
+@media(max-width:950px){
+    .summary-grid{
+        grid-template-columns:repeat(2,1fr);
+    }
+
+    .overview-rows{
+        grid-template-columns:1fr;
+    }
+}
+
+@media(max-width:650px){
+    body{
+        padding:10px;
+    }
+
+    .report-shell{
+        padding:14px;
+    }
+
+    .report-header{
+        flex-direction:column;
+        align-items:flex-start;
+    }
+
+    .actions{
+        width:100%;
+    }
+
+    .btn{
+        flex:1;
+    }
+
+    .summary-grid{
+        grid-template-columns:1fr;
+    }
+}
+
+@media print{
+    body{
+        background:#fff;
+        padding:0;
+    }
+
+    .report-shell{
+        max-width:100%;
+        box-shadow:none;
+        border:0;
+    }
+
+    .actions,
+    .success-toast{
+        display:none;
+    }
+}
+
+@keyframes fadeToast{
+    from{ opacity:0; transform:translateY(-8px); }
+    to{ opacity:1; transform:translateY(0); }
+}
+
+@keyframes hideToast{
+    to{ opacity:0; visibility:hidden; transform:translateY(-8px); }
+}
+</style>
+</head>
+
+<body>
+    <div class="success-toast">
+        <i class="fas fa-check"></i>
+        Report generated successfully
+    </div>
+
+    <main class="report-shell">
+        <header class="report-header">
+            <div class="brand">
+                <div class="logo">
+                    <i class="fas fa-shield-halved"></i>
+                </div>
+
+                <div>
+                    <h1>FinSight Report</h1>
+                    <p>Generated for {{ username }}</p>
+                </div>
+            </div>
+
+            <div class="actions">
+                <a href="{{ url_for('dashboard') }}" class="btn">
+                    <i class="fas fa-arrow-left"></i>
+                    Dashboard
+                </a>
+
+                <button type="button" class="btn btn-primary" onclick="window.print()">
+                    <i class="fas fa-file-pdf"></i>
+                    Print 
+                </button>
+            </div>
+        </header>
+
+        <section class="intro">
+            <div class="badge">
+                <i class="fas fa-chart-simple"></i>
+                Financial Summary
+            </div>
+
+            <h2>Your financial report is ready.</h2>
+            <p>
+                Review income, expenses, savings, savings rate, and spending insights generated by AWS Lambda from your current FinSight transactions.
+            </p>
+        </section>
+
+        <section class="summary-grid">
+            <div class="metric-card income">
+                <div class="metric-top">
+                    <span>Total Income</span>
+                    <i class="fas fa-briefcase"></i>
+                </div>
+                <div class="metric-value positive">${{ "%.2f"|format(lambda_report.total_income or 0) }}</div>
+                <div class="metric-note">Income recorded</div>
+            </div>
+
+            <div class="metric-card expense">
+                <div class="metric-top">
+                    <span>Total Expenses</span>
+                    <i class="fas fa-receipt"></i>
+                </div>
+                <div class="metric-value negative">${{ "%.2f"|format(lambda_report.total_expenses or 0) }}</div>
+                <div class="metric-note">Expenses recorded</div>
+            </div>
+
+            <div class="metric-card savings">
+                <div class="metric-top">
+                    <span>Savings</span>
+                    <i class="fas fa-piggy-bank"></i>
+                </div>
+                <div class="metric-value {% if lambda_report.savings and lambda_report.savings >= 0 %}positive{% else %}negative{% endif %}">
+                    ${{ "%.2f"|format(lambda_report.savings or 0) }}
+                </div>
+                <div class="metric-note">Income minus expenses</div>
+            </div>
+
+            <div class="metric-card rate">
+                <div class="metric-top">
+                    <span>Savings Rate</span>
+                    <i class="fas fa-percent"></i>
+                </div>
+                <div class="metric-value primary-text">{{ lambda_report.savings_rate or 0 }}%</div>
+                <div class="metric-note">Percentage saved</div>
+            </div>
+        </section>
+
+        <section class="bottom-grid">
+            <div class="overview-card">
+                <div class="section-head">
+                    <h3>Spending Overview</h3>
+                    <i class="fas fa-wallet"></i>
+                </div>
+
+                <div class="overview-rows">
+                    <div class="info-row">
+                        <span>Top Spending Category</span>
+                        <strong>{{ lambda_report.top_spending_category or 'N/A' }}</strong>
+                    </div>
+
+                    <div class="info-row">
+                        <span>Financial Health</span>
+                        <strong class="{{ lambda_report.health_class or 'primary-text' }}">{{ lambda_report.health_status or 'N/A' }}</strong>
+                    </div>
+
+                    <div class="info-row">
+                        <span>Savings Rate</span>
+                        <strong class="primary-text">{{ lambda_report.savings_rate or 0 }}%</strong>
+                    </div>
+                </div>
+
+                {% if lambda_report.category_breakdown %}
+                <div class="category-list">
+                    {% for item in lambda_report.category_breakdown[:5] %}
+                    <div class="category-item">
+                        <strong>{{ item.category }}</strong>
+                        <span>${{ "%.2f"|format(item.amount or 0) }}</span>
+                        <span>{{ item.percentage or 0 }}%</span>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% endif %}
+            </div>
+
+            <div class="insight-line">
+                <i class="fas fa-lightbulb"></i>
+                <div>
+                    <strong>Financial Insight:</strong>
+                    {{ health_message }}
+                    {% if top_category != 'N/A' %}
+                        {{ lambda_report.top_spending_category or 'N/A' }} is your highest spending category, so reviewing that area may help improve long-term savings.
+                    {% endif %}
+                </div>
+            </div>
+        </section>
+
+        <p class="footer">
+            FinSight keeps your report simple, readable, and focused on the numbers that matter most.
+        </p>
+    </main>
+
+<script>
+(function () {
+    const savedTheme = localStorage.getItem('FinSight-theme');
+    if (savedTheme === 'dark') {
+        document.body.classList.add('dark-mode');
+    }
+})();
+</script>
+</body>
+</html>

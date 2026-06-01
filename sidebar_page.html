@@ -1,0 +1,1593 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ page_title }} | FinSight</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+:root{
+    --ink:#111827;
+    --muted:#6b7280;
+    --line:#e9e6f5;
+    --panel:#ffffff;
+    --soft:#f6f4ff;
+    --primary:#6d4df7;
+    --green:#16a34a;
+    --red:#dc2626;
+    --shadow:0 18px 50px rgba(65,50,120,0.13);
+}
+*{ margin:0; padding:0; box-sizing:border-box; }
+body{
+    min-height:100vh;
+    font-family:'Inter',sans-serif;
+    color:var(--ink);
+    background:
+        radial-gradient(circle at top left, rgba(109,77,247,0.20), transparent 32%),
+        linear-gradient(135deg,#f8f7ff 0%,#f2fbff 52%,#fff8fb 100%);
+    padding:14px;
+}
+a{ color:inherit; text-decoration:none; }
+button,input,select{ font:inherit; }
+.shell{
+    max-width:1540px;
+    min-height:calc(100vh - 28px);
+    margin:auto;
+    display:grid;
+    grid-template-columns:236px 1fr;
+    gap:14px;
+    border-radius:18px;
+    overflow:hidden;
+    background:rgba(255,255,255,0.34);
+    border:1px solid rgba(255,255,255,0.55);
+    box-shadow:0 24px 80px rgba(44,32,104,0.18);
+}
+/* =========================================
+   SIDEBAR NAVIGATION STYLES
+========================================= */
+.sidebar{
+    background:rgba(255,255,255,0.72);
+    backdrop-filter:blur(18px);
+    padding:26px 16px 18px;
+    display:flex;
+    flex-direction:column;
+    gap:22px;
+}
+.brand{ display:flex; align-items:center; gap:12px; padding:0 8px; }
+.brand-mark{
+    width:38px;
+    height:38px;
+    border-radius:12px;
+    display:grid;
+    place-items:center;
+    color:white;
+    background:conic-gradient(from 210deg,#18c7b8,#5f73ff,#a64dff,#ff4da0,#18c7b8);
+}
+.brand h1{ font-size:21px; line-height:1; }
+.brand p{ margin-top:5px; font-size:12px; color:var(--muted); font-weight:500; }
+.nav{ display:grid; gap:6px; }
+.nav-item{
+    height:48px;
+    padding:0 13px;
+    display:flex;
+    align-items:center;
+    gap:12px;
+    border-radius:12px;
+    color:#3f3d56;
+    font-size:14px;
+    font-weight:600;
+}
+.nav-item i{ width:18px; text-align:center; color:#4b5563; }
+.nav-item.active{
+    color:white;
+    background:linear-gradient(135deg,#7c3aed,#39a8ff);
+    box-shadow:0 14px 28px rgba(109,77,247,0.30);
+}
+.nav-item.active i{ color:white; }
+.nav-section{
+    color:var(--muted);
+    font-size:11px;
+    font-weight:800;
+    letter-spacing:0;
+    text-transform:uppercase;
+    padding:12px 13px 4px;
+}
+
+.sidebar-footer{
+    margin-top:auto;
+    border-radius:14px;
+    padding:12px;
+    display:flex;
+    align-items:center;
+    gap:11px;
+    background:rgba(255,255,255,0.78);
+    box-shadow:0 10px 30px rgba(74,55,132,0.10);
+}
+.avatar{
+    width:42px;
+    height:42px;
+    border-radius:50%;
+    display:grid;
+    place-items:center;
+    color:white;
+    font-weight:800;
+    background:linear-gradient(135deg,#1fb6a6,#6d4df7);
+}
+.user-mini{ min-width:0; }
+.user-mini strong{ display:block; font-size:14px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.user-mini span{ display:block; color:var(--muted); font-size:12px; margin-top:3px; }
+.content{ padding:26px; min-width:0; }
+.topbar{ display:flex; justify-content:space-between; align-items:flex-start; gap:20px; margin-bottom:22px; }
+.welcome h2{ font-size:30px; line-height:1.15; }
+.eyebrow{ color:var(--muted); font-size:14px; margin-top:8px; }
+.btn{
+    min-height:42px;
+    border:0;
+    padding:0 15px;
+    border-radius:12px;
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    gap:8px;
+    cursor:pointer;
+    color:white;
+    font-weight:700;
+    font-size:13px;
+    background:linear-gradient(135deg,#6d4df7,#8b5cf6);
+}
+.btn-secondary{ color:var(--ink); background:rgba(255,255,255,0.78); border:1px solid var(--line); }
+.grid{ 
+    display:grid; 
+    grid-template-columns:repeat(3,minmax(0,1fr)); 
+    gap:18px; 
+    align-items:start; 
+}
+
+.wide{ 
+    grid-column:span 2; 
+}
+
+.full{ 
+    grid-column:1 / -1; 
+}
+.budget-tools-card{
+    align-self:start;
+    margin-top:0;
+}
+.budget-page-layout{
+    grid-column:1 / -1;
+    width:100%;
+    display:grid;
+    grid-template-columns:minmax(380px, 430px) minmax(520px, 1fr);
+    gap:28px;
+    align-items:start;
+}
+
+.budget-left,
+.budget-left-column{
+    display:grid;
+    grid-template-columns:1fr;
+    gap:26px;
+    align-items:start;
+}
+
+.category-budget-card,
+.budget-category-card{
+    width:100%;
+    min-height:100%;
+}
+
+.category-budget-card .list,
+.budget-category-card .list{
+    display:grid;
+    gap:14px;
+}
+
+@media(max-width:1000px){
+    .budget-page-layout{
+        grid-template-columns:1fr;
+    }
+}
+
+@media(max-width:1000px){
+    .budget-page-layout{
+        grid-template-columns:1fr;
+    }
+}
+/* =========================================
+   CARD / PANEL STYLES
+========================================= */
+.card{
+    background:rgba(255,255,255,0.78);
+    border:1px solid rgba(255,255,255,0.76);
+    border-radius:18px;
+    box-shadow:var(--shadow);
+    padding:22px;
+}
+.card h3{ font-size:17px; margin-bottom:15px; }
+.metric{ color:var(--muted); font-size:12px; font-weight:700; }
+.big{ display:block; margin-top:7px; font-size:27px; font-weight:800; }
+.positive{ color:var(--green); }
+.negative{ color:var(--red); }
+.list{ display:grid; gap:11px; }
+.row{
+    display:grid;
+    grid-template-columns:1fr auto;
+    gap:12px;
+    padding:12px 0;
+    border-bottom:1px solid var(--line);
+    font-size:13px;
+}
+.row:last-child{ border-bottom:0; }
+.row strong{ display:block; margin-bottom:4px; }
+.muted{ color:var(--muted); font-size:12px; line-height:1.5; }
+.chart{ height:320px; }
+.pill{
+    display:inline-flex;
+    align-items:center;
+    height:30px;
+    padding:0 10px;
+    border-radius:999px;
+    background:#f1edff;
+    color:#5b35d5;
+    font-size:12px;
+    font-weight:800;
+}
+.form-grid{ display:grid; gap:12px; }
+.input{
+    width:100%;
+    height:43px;
+    border:1px solid var(--line);
+    border-radius:11px;
+    padding:0 12px;
+    outline:0;
+    background:rgba(255,255,255,0.78);
+}
+.progress{
+    height:9px;
+    border-radius:999px;
+    overflow:hidden;
+    background:#e8e3f8;
+    margin-top:9px;
+}
+.progress span{ display:block; height:100%; border-radius:999px; background:linear-gradient(90deg,#16a34a,#6d4df7); }
+@media(max-width:1100px){
+    .grid{ grid-template-columns:1fr 1fr; }
+    .wide{ grid-column:span 2; }
+}
+@media(max-width:850px){
+    body{ padding:0; }
+    .shell{ min-height:100vh; border-radius:0; grid-template-columns:1fr; }
+    .sidebar{ display:none; }
+    .content{ padding:20px; }
+    .topbar{ flex-direction:column; }
+    .grid,.wide{ grid-template-columns:1fr; grid-column:auto; }
+}
+
+/* =========================================
+   PROFESSIONAL SIDEBAR PAGE POLISH
+========================================= */
+.nav-item{ transition:all .22s ease; }
+.nav-item:hover{ background:rgba(109,77,247,0.08); transform:translateX(3px); }
+.nav-item.active:hover{ background:linear-gradient(135deg,#7c3aed,#39a8ff); }
+.card{
+    position:relative;
+    overflow:hidden;
+    transition:transform .24s ease, box-shadow .24s ease, border-color .24s ease;
+}
+.card:hover{
+    transform:translateY(-3px);
+    box-shadow:0 24px 60px rgba(65,50,120,0.17);
+    border-color:rgba(109,77,247,0.18);
+}
+.card-corner-icon{
+    position:absolute;
+    top:18px;
+    right:18px;
+    width:44px;
+    height:44px;
+    border-radius:16px;
+    display:grid;
+    place-items:center;
+    color:#6d4df7;
+    background:linear-gradient(135deg,rgba(109,77,247,.14),rgba(139,92,246,.05));
+    box-shadow:0 12px 24px rgba(109,77,247,.12);
+    animation:softFloat 3.3s ease-in-out infinite;
+}
+.action-buttons{
+    display:flex;
+    gap:10px;
+    flex-wrap:wrap;
+}
+.table-row-soft{
+    transition:background .2s ease, transform .2s ease;
+}
+.table-row-soft:hover{
+    background:rgba(109,77,247,0.04);
+    transform:translateX(2px);
+}
+.modal-backdrop{
+    position:fixed;
+    inset:0;
+    background:rgba(15,23,42,0.36);
+    backdrop-filter:blur(10px);
+    -webkit-backdrop-filter:blur(10px);
+    z-index:3000;
+    display:none;
+    align-items:center;
+    justify-content:center;
+    padding:20px;
+}
+.modal-backdrop.show{ display:flex; }
+.modal-card{
+    width:min(460px, 100%);
+    background:rgba(255,255,255,0.96);
+    border:1px solid rgba(255,255,255,0.76);
+    border-radius:26px;
+    box-shadow:0 30px 80px rgba(30,20,80,0.25);
+    padding:24px;
+    animation:modalPop .22s ease both;
+}
+.modal-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-start;
+    gap:14px;
+    margin-bottom:18px;
+}
+.modal-header h3{ margin:0 0 5px; }
+.icon-btn{
+    border:0;
+    width:42px;
+    height:42px;
+    border-radius:14px;
+    display:grid;
+    place-items:center;
+    background:#f3edff;
+    color:#6d4df7;
+    cursor:pointer;
+}
+.modal-form{ display:grid; gap:10px; }
+.modal-form label{
+    font-size:13px;
+    font-weight:800;
+    color:var(--muted);
+}
+.modal-submit{
+    margin-top:8px;
+    justify-content:center;
+}
+@keyframes softFloat{
+    0%,100%{ transform:translateY(0); }
+    50%{ transform:translateY(-4px); }
+}
+@keyframes modalPop{
+    from{ opacity:0; transform:translateY(10px) scale(.98); }
+    to{ opacity:1; transform:translateY(0) scale(1); }
+}
+
+
+.page-title-wrap{
+    display:flex;
+    align-items:center;
+    gap:14px;
+}
+.page-icon{
+    width:48px;
+    height:48px;
+    border-radius:16px;
+    display:grid;
+    place-items:center;
+    color:white;
+    background:linear-gradient(135deg,#6d4df7,#8b5cf6);
+    box-shadow:0 16px 34px rgba(109,77,247,0.28);
+    animation:softFloat 3.2s ease-in-out infinite;
+}
+
+</style>
+</head>
+<body>
+<!-- =========================================
+     MAIN PAGE BODY
+========================================= -->
+<div class="shell">
+    <!-- =========================================
+         LEFT SIDEBAR MENU
+    ========================================= -->
+    <aside class="sidebar">
+        <div class="brand">
+            <div class="brand-mark"><i class="fas fa-shield-halved"></i></div>
+            <div>
+                <h1>FinSight</h1>
+                <p>Personal Finance Advisor</p>
+            </div>
+        </div>
+
+        <nav class="nav">
+            <a class="nav-item {% if active_page == 'dashboard' %}active{% endif %}" href="/dashboard"><i class="fas fa-house"></i>Dashboard</a>
+            <a class="nav-item {% if active_page == 'transactions' %}active{% endif %}" href="/transactions"><i class="fas fa-arrow-right-arrow-left"></i>Transactions</a>
+            <a class="nav-item {% if active_page == 'budgets' %}active{% endif %}" href="/budgets"><i class="fas fa-calendar-check"></i>Budgets</a>
+            <div class="nav-section">Intelligence Suite</div>
+            <a class="nav-item {% if active_page == 'analytics' %}active{% endif %}" href="/analytics"><i class="fas fa-chart-line"></i>Analytics</a>
+            <a class="nav-item {% if active_page == 'predictions' %}active{% endif %}" href="/predictions"><i class="fas fa-wand-magic-sparkles"></i>Predictions</a>
+            <a class="nav-item {% if active_page == 'ai-assistant' %}active{% endif %}" href="/ai-assistant"><i class="fas fa-robot"></i>AI Assistant</a>
+            <a class="nav-item" href="/profile"><i class="fas fa-user"></i>Profile</a>
+            <a class="nav-item" href="/logout"><i class="fas fa-right-from-bracket"></i>Logout</a>
+        </nav>
+
+
+
+        <div class="sidebar-footer">
+            <div class="avatar">{{ username[0]|upper }}</div>
+            <div class="user-mini">
+                <strong>{{ username }}</strong>
+                <span>FinSight member</span>
+            </div>
+        </div>
+    </aside>
+
+    <!-- =========================================
+         MAIN CONTENT AREA
+    ========================================= -->
+    <main class="content">
+        <div class="topbar">
+            <div class="page-title-wrap">
+                <div class="page-icon">
+                    {% if active_page == 'transactions' %}
+                        <i class="fas fa-arrow-right-arrow-left"></i>
+                    {% elif active_page == 'budgets' %}
+                        <i class="fas fa-calendar-check"></i>
+                    {% elif active_page == 'analytics' %}
+                        <i class="fas fa-chart-line"></i>
+                    {% elif active_page == 'predictions' %}
+                        <i class="fas fa-wand-magic-sparkles"></i>
+                    {% elif active_page == 'ai-assistant' %}
+                        <i class="fas fa-robot"></i>
+                    {% else %}
+                        <i class="fas fa-layer-group"></i>
+                    {% endif %}
+                </div>
+                <div class="welcome">
+                    <h2>{{ page_title }}</h2>
+                    <p class="eyebrow">{{ page_subtitle }}</p>
+                </div>
+            </div>
+            <a class="btn btn-secondary" href="/dashboard"><i class="fas fa-arrow-left"></i>Back to Dashboard</a>
+        </div>
+
+        <section class="grid">
+            <!-- =========================================
+                 TRANSACTIONS PAGE
+            ========================================= -->
+            {% if active_page == 'transactions' %}
+                <div class="card full">
+                    <div class="card-corner-icon"><i class="fas fa-receipt"></i></div>
+                    <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:14px;">
+                        <h3 style="margin-bottom:0;">Transaction Ledger <span style="color:var(--muted);font-size:13px;font-weight:600;">({{ transactions|length }} records)</span></h3>
+                        <div class="action-buttons">
+                            <a class="btn btn-secondary" href="/export_transactions"><i class="fas fa-file-csv"></i>Export CSV</a>
+                            <button class="btn btn-secondary" type="button" onclick="loadTransactionsApi()"><i class="fas fa-rotate"></i>Refresh</button>
+                            <button class="btn" type="button" onclick="openTransactionModal(); return false;"><i class="fas fa-plus"></i>Add Transaction</button>
+                        </div>
+                    </div>
+                    <div style="display:grid;grid-template-columns:1fr 180px 160px;gap:10px;margin-bottom:14px;">
+                        <input type="text" id="txSearch" class="input" placeholder="Search category..." oninput="filterTxRows()">
+                        <select id="txTypeFilter" class="input" onchange="filterTxRows()">
+                            <option value="all">All Types</option>
+                            <option value="income">Income</option>
+                            <option value="expense">Expense</option>
+                        </select>
+                        <select id="txMonthFilter" class="input" onchange="filterTxRows()">
+                            <option value="all">All Months</option>
+                            {% for label in monthly_labels %}
+                            <option value="{{ label }}">{{ label }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="list" id="txLedgerList" style="max-height:620px;overflow-y:auto;">
+                        {% for row in transactions %}
+                        {% set is_income = row.category|lower in ['salary','income','paycheck','bonus'] %}
+                        <div class="row tx-ledger-row table-row-soft" data-category="{{ row.category|lower }}" data-type="{{ 'income' if is_income else 'expense' }}" data-date="{{ row.date }}">
+                            <div style="display:flex;align-items:center;gap:12px;">
+                                <span style="width:34px;height:34px;border-radius:10px;display:grid;place-items:center;color:white;background:{{ '#059669' if is_income else '#e11d48' }};flex:0 0 auto;">
+                                    <i class="fas fa-{{ 'wallet' if is_income else 'receipt' }}" style="font-size:14px;"></i>
+                                </span>
+                                <div>
+                                    <strong>{{ row.category }}</strong>
+                                    <span class="muted" style="display:block;">{{ row.date }}</span>
+                                </div>
+                            </div>
+                            <div style="display:flex;align-items:center;justify-content:flex-end;gap:10px;">
+                                <strong class="{% if is_income %}positive{% else %}negative{% endif %}">{{ '+' if is_income else '-' }}${{ "%.2f"|format(row.amount) }}</strong>
+                                <button type="button" onclick="deleteTransactionApi({{ row.id }})" title="Delete transaction" style="width:32px;height:32px;border:0;border-radius:10px;background:#fee2e2;color:#991b1b;cursor:pointer;display:grid;place-items:center;">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        </div>
+                        {% else %}
+                        <p class="muted">No transactions yet. Add your first transaction using the button above.</p>
+                        {% endfor %}
+                    </div>
+                </div>
+                <script>
+                function getTxMonthLabel(date){
+                    return date ? new Date(date + 'T00:00:00').toLocaleDateString('en-US',{month:'short',year:'numeric'}) : '';
+                }
+
+                function renderTransactionRows(transactions){
+                    const list = document.getElementById('txLedgerList');
+                    if(!list) return;
+
+                    if(!transactions || transactions.length === 0){
+                        list.innerHTML = '<p class="muted">No transactions yet. Add your first transaction using the button above.</p>';
+                        return;
+                    }
+
+                    list.innerHTML = transactions.map(row => {
+                        const isIncome = Boolean(row.is_income);
+                        const category = row.category || 'Uncategorized';
+                        const date = row.date || '';
+                        const amount = Number(row.amount || 0);
+                        const icon = isIncome ? 'wallet' : 'receipt';
+                        const bg = isIncome ? '#059669' : '#e11d48';
+                        const sign = isIncome ? '+' : '-';
+                        const amountClass = isIncome ? 'positive' : 'negative';
+
+                        return `
+                            <div class="row tx-ledger-row table-row-soft" data-category="${category.toLowerCase()}" data-type="${isIncome ? 'income' : 'expense'}" data-date="${date}">
+                                <div style="display:flex;align-items:center;gap:12px;">
+                                    <span style="width:34px;height:34px;border-radius:10px;display:grid;place-items:center;color:white;background:${bg};flex:0 0 auto;">
+                                        <i class="fas fa-${icon}" style="font-size:14px;"></i>
+                                    </span>
+                                    <div>
+                                        <strong>${category}</strong>
+                                        <span class="muted" style="display:block;">${date}</span>
+                                    </div>
+                                </div>
+                                <div style="display:flex;align-items:center;justify-content:flex-end;gap:10px;">
+                                    <strong class="${amountClass}">${sign}$${amount.toFixed(2)}</strong>
+                                    <button type="button" onclick="deleteTransactionApi(${row.id})" title="Delete transaction" style="width:32px;height:32px;border:0;border-radius:10px;background:#fee2e2;color:#991b1b;cursor:pointer;display:grid;place-items:center;">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        `;
+                    }).join('');
+
+                    filterTxRows();
+                }
+
+
+                function openTransactionModal(){
+                    const modal = document.getElementById('transactionModal');
+                    if(modal){ modal.classList.add('show'); }
+                }
+
+                function closeTransactionModal(){
+                    const modal = document.getElementById('transactionModal');
+                    if(modal){ modal.classList.remove('show'); }
+                }
+
+                async function addTransactionApi(event){
+                    event.preventDefault();
+
+                    const form = document.getElementById('transactionForm');
+                    const formData = new FormData(form);
+
+                    try{
+                        const response = await fetch('/api/transactions', {
+                            method:'POST',
+                            body:formData
+                        });
+
+                        const result = await response.json();
+
+                        if(result.success){
+                            form.reset();
+                            closeTransactionModal();
+                            await loadTransactionsApi();
+                            alert(result.message || 'Transaction added successfully.');
+                        }else{
+                            alert(result.message || 'Unable to add transaction.');
+                        }
+                    }catch(error){
+                        console.error('Add transaction API error:', error);
+                        alert('Something went wrong while adding the transaction.');
+                    }
+                }
+
+                async function loadTransactionsApi(){
+                    const list = document.getElementById('txLedgerList');
+                    if(list){
+                        list.innerHTML = '<p class="muted"><i class="fas fa-spinner fa-spin"></i> Loading transactions from API...</p>';
+                    }
+
+                    try{
+                        const response = await fetch('/api/transactions');
+                        const result = await response.json();
+
+                        if(result.success){
+                            renderTransactionRows(result.transactions);
+                        }else{
+                            alert(result.message || 'Unable to load transactions.');
+                        }
+                    }catch(error){
+                        console.error('Transactions API error:', error);
+                        alert('Something went wrong while loading transactions.');
+                    }
+                }
+
+                async function deleteTransactionApi(transactionId){
+                    if(!confirm('Delete this transaction?')) return;
+
+                    try{
+                        const response = await fetch(`/api/transactions/${transactionId}`, {
+                            method: 'DELETE'
+                        });
+
+                        const result = await response.json();
+
+                        if(result.success){
+                            await loadTransactionsApi();
+                        }else{
+                            alert(result.message || 'Unable to delete transaction.');
+                        }
+                    }catch(error){
+                        console.error('Delete transaction API error:', error);
+                        alert('Something went wrong while deleting the transaction.');
+                    }
+                }
+
+                function filterTxRows(){
+                    const searchEl = document.getElementById('txSearch');
+                    const typeEl = document.getElementById('txTypeFilter');
+                    const monthEl = document.getElementById('txMonthFilter');
+
+                    const search = searchEl ? searchEl.value.toLowerCase() : '';
+                    const type = typeEl ? typeEl.value : 'all';
+                    const month = monthEl ? monthEl.value : 'all';
+
+                    document.querySelectorAll('.tx-ledger-row').forEach(row => {
+                        const cat = row.dataset.category || '';
+                        const rowType = row.dataset.type || '';
+                        const date = row.dataset.date || '';
+                        const monthLabel = getTxMonthLabel(date);
+                        const matchSearch = cat.includes(search);
+                        const matchType = type === 'all' || rowType === type;
+                        const matchMonth = month === 'all' || monthLabel === month;
+                        row.style.display = (matchSearch && matchType && matchMonth) ? '' : 'none';
+                    });
+                }
+
+                loadTransactionsApi();
+                </script>
+
+           <!-- =========================================
+                BUDGETS PAGE
+           ========================================= -->
+           {% elif active_page == 'budgets' %}
+
+    <div class="budget-page-layout">
+
+        <!-- LEFT SIDE -->
+        <div class="budget-left">
+
+            <!-- Budget Snapshot -->
+            <div class="card">
+                <div class="card-corner-icon"><i class="fas fa-wallet"></i></div>
+                <h3>Budget Snapshot</h3>
+
+                <span class="metric">Suggested monthly guardrail</span>
+
+                <strong class="big">
+                    ${{ "%.2f"|format(total_expenses / [monthly_labels|length, 1]|max) }}
+                </strong>
+
+                <p class="muted">
+                    Based on your average monthly expense history.
+                </p>
+            </div>
+
+            <!-- Budget Tools -->
+            <div class="card budget-tools-card">
+                <div class="card-corner-icon"><i class="fas fa-sliders"></i></div>
+                <h3>
+                    <i class="fas fa-toolbox" style="color:#6d4df7;margin-right:8px;"></i>
+                    Budget Tools
+                </h3>
+
+                <form id="budgetForm" onsubmit="saveBudgetApi(event); return false;">
+                    <div style="display:grid;gap:12px;">
+                        <input 
+                            type="text" 
+                            name="budget_category" 
+                            class="input" 
+                            placeholder="Budget category" 
+                            list="cat-suggestions-page"
+                        >
+
+                        <datalist id="cat-suggestions-page">
+                            {% for c in all_categories %}
+                                <option value="{{ c }}">
+                            {% endfor %}
+                        </datalist>
+
+                        <input 
+                            type="number" 
+                            name="budget_limit" 
+                            class="input" 
+                            placeholder="Monthly limit ($)" 
+                            min="0" 
+                            step="0.01"
+                        >
+
+                        <button 
+                            type="submit" 
+                            class="btn" 
+                            style="background:linear-gradient(135deg,#22c55e,#16a34a);"
+                        >
+                            <i class="fas fa-check"></i>
+                            Save Budget
+                        </button>
+                    </div>
+                </form>
+
+                <div style="display:grid;gap:10px;margin-top:18px;">
+                    <a class="btn btn-secondary" href="/export_transactions">
+                        <i class="fas fa-file-csv"></i>
+                        Export Transactions CSV
+                    </a>
+                </div>
+            </div>
+
+        </div>
+
+
+        <!-- RIGHT SIDE -->
+        <div class="card category-budget-card">
+            <div class="card-corner-icon"><i class="fas fa-chart-pie"></i></div>
+            <h3>Category Budgets</h3>
+
+            <div class="list">
+                {% for label in category_labels[:8] %}
+                    {% set percent = ((category_values[loop.index0] / total_expenses) * 100) if total_expenses else 0 %}
+
+                    <div>
+                        <div class="row">
+                            <strong>{{ label }}</strong>
+                            <strong>${{ "%.0f"|format(category_values[loop.index0]) }}</strong>
+                        </div>
+
+                        <div class="progress">
+                            <span style="width:{{ [percent, 100]|min }}%"></span>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+
+    </div>
+
+            <!-- =========================================
+                 ANALYTICS PAGE
+            ========================================= -->
+            {% elif active_page == 'analytics' %}
+
+    <div class="card full">
+        <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;">
+            <div>
+                <h3 style="margin-bottom:6px;">Analytics Filters</h3>
+                <span class="metric">Choose year and month to view financial data.</span>
+            </div>
+
+            <div style="display:flex;gap:12px;flex-wrap:wrap;">
+                <select id="analyticsYearFilter" class="input" style="width:auto;min-width:150px;height:44px;font-family:Inter;font-size:14px;font-weight:800;">
+                </select>
+
+                <select id="analyticsMonthFilter" class="input" style="width:auto;min-width:170px;height:44px;font-family:Inter;font-size:14px;font-weight:800;">
+                    <option value="all">All Months</option>
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-corner-icon"><i class="fas fa-sack-dollar"></i></div>
+        <h3>Income</h3>
+        <span class="metric" id="incomeMetricLabel">Selected period income</span>
+        <strong class="big positive" id="analyticsIncomeValue">$0.00</strong>
+    </div>
+
+    <div class="card">
+        <div class="card-corner-icon"><i class="fas fa-receipt"></i></div>
+        <h3>Expenses</h3>
+        <span class="metric" id="expenseMetricLabel">Selected period expenses</span>
+        <strong class="big negative" id="analyticsExpenseValue">$0.00</strong>
+    </div>
+
+    <div class="card">
+        <div class="card-corner-icon"><i class="fas fa-piggy-bank"></i></div>
+        <h3>Savings Rate</h3>
+        <span class="metric">Income retained</span>
+        <strong class="big" id="analyticsSavingsRateValue">0%</strong>
+    </div>
+
+    <div class="card full">
+        <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:14px;">
+            <h3 style="margin-bottom:0;">Monthly Income vs Expenses</h3>
+        </div>
+
+        <div class="chart">
+            <canvas id="pageChart"></canvas>
+        </div>
+    </div>
+
+<!-- =========================================
+     PREDICTIONS PAGE
+========================================= -->
+{% elif active_page == 'predictions' %}
+               <div class="card">
+    <div class="card-corner-icon"><i class="fas fa-chart-simple"></i></div>
+    <h3>Predicted Expense</h3>
+    <span class="metric">Next month forecast</span>
+    <strong class="big">
+        ${{ "%.2f"|format(predicted_expense or 0) }}
+    </strong>
+</div>
+
+<div class="card">
+    <div class="card-corner-icon"><i class="fas fa-vault"></i></div>
+    <h3>Predicted Savings</h3>
+    <span class="metric">Next month forecast</span>
+    <strong class="big {% if predicted_savings and predicted_savings.next_month >= 0 %}positive{% else %}negative{% endif %}">
+        ${{ "%.2f"|format(predicted_savings.next_month if predicted_savings else 0) }}
+    </strong>
+</div>
+
+<div class="card">
+    <div class="card-corner-icon"><i class="fas fa-arrow-trend-up"></i></div>
+    <h3>Trend</h3>
+    <span class="metric">Savings direction</span>
+    <strong class="big">
+        {{ predicted_savings.trend|capitalize if predicted_savings else 'Pending' }}
+    </strong>
+</div>
+
+<div class="card full">
+    <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:18px;">
+        
+        <div>
+            <h3 style="margin-bottom:6px;">
+                <i class="fas fa-chart-line" style="color:#6d4df7;margin-right:8px;"></i>
+                Financial Forecast Overview
+            </h3>
+
+            <p class="muted">
+                prediction for expenses and savings
+            </p>
+        </div>
+
+        <span class="pill"> Forecast</span>
+    </div>
+
+    <div class="chart" style="height:340px;">
+        <canvas id="combinedPredictionChart"></canvas>
+    </div>
+</div>
+            <!-- =========================================
+                 AI ASSISTANT PAGE
+            ========================================= -->
+            {% elif active_page == 'ai-assistant' %}
+                <!-- AI Insights - full width, AI generated from dashboard data -->
+               <div class="card">
+    <div class="card-corner-icon"><i class="fas fa-brain"></i></div>
+    <h3>
+        AI Financial Score
+    </h3>
+
+    <span class="metric">Overall financial health</span>
+
+    <strong class="big positive">
+        {{ financial_health_score or 52 }}/100
+    </strong>
+
+    <div class="progress" style="margin-top:18px;">
+        <span style="width:{{ financial_health_score or 52 }}%;"></span>
+    </div>
+
+    <p class="muted" style="margin-top:14px;">
+        {{ financial_health_message or 'Your score is calculated from Lambda using savings rate, cash flow, and spending trends.' }}
+    </p>
+</div>
+
+
+<div class="card">
+    <div class="card-corner-icon"><i class="fas fa-wallet"></i></div>
+    <h3>
+        Spending Analysis
+    </h3>
+
+    <div class="list">
+
+        <div class="row">
+            <div>
+                <strong>Top Expense Category</strong>
+                <span class="muted">
+                    Highest spending category detected
+                </span>
+            </div>
+
+            <strong>
+                {{ category_labels[0] if category_labels else 'N/A' }}
+            </strong>
+        </div>
+
+        <div class="row">
+            <div>
+                <strong>Savings Rate</strong>
+                <span class="muted">
+                    Percentage of income saved
+                </span>
+            </div>
+
+            <strong class="positive">
+                {{ savings_rate }}%
+            </strong>
+        </div>
+
+        <div class="row">
+            <div>
+                <strong>Expense Stability</strong>
+                <span class="muted">
+                    Monthly spending consistency
+                </span>
+            </div>
+
+            <strong style="color:#4f46e5;">
+                Stable
+            </strong>
+        </div>
+
+    </div>
+</div>
+
+
+<div class="card full">
+    <div class="card-corner-icon"><i class="fas fa-wand-magic-sparkles"></i></div>
+
+    <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:18px;">
+
+        <h3 style="margin-bottom:0;">
+            AI Insights
+        </h3>
+
+        <div style="display:flex;gap:8px;flex-wrap:wrap;">
+            <span class="pill">
+                Savings: ${{ "%.2f"|format(savings) }}
+            </span>
+
+            <span class="pill">
+                Expenses: ${{ "%.2f"|format(total_expenses) }}
+            </span>
+
+            <span class="pill">
+                Rate: {{ savings_rate }}%
+            </span>
+        </div>
+
+    </div>
+
+    <div id="aiInsightsContainer"
+         style="display:grid;
+         grid-template-columns:repeat(auto-fill,minmax(280px,1fr));
+         gap:14px;">
+
+        <div style="padding:16px;border-radius:14px;background:#f6f3ff;color:#423262;font-size:13px;line-height:1.6;grid-column:1/-1;">
+
+            <i class="fas fa-spinner fa-spin"
+               style="margin-right:8px;color:#6d4df7;"></i>
+
+            Analysing your financial data and generating insights...
+
+        </div>
+
+    </div>
+</div>
+          
+{% endif %}
+        </section>
+    </main>
+</div>
+
+
+<!-- Add Transaction Modal -->
+<div id="transactionModal" class="modal-backdrop">
+    <div class="modal-card">
+        <div class="modal-header">
+            <div>
+                <h3>Add Transaction</h3>
+                <p class="muted">Record income or expenses in your ledger.</p>
+            </div>
+            <button class="icon-btn" type="button" onclick="closeTransactionModal()" aria-label="Close modal">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+
+        <form id="transactionForm" class="modal-form" onsubmit="addTransactionApi(event); return false;">
+            <label>Date</label>
+            <input type="date" name="date" class="input" required>
+
+            <label>Category</label>
+            <input type="text" name="category" class="input" placeholder="Food, Rent, Salary..." list="cat-suggestions-tx" required>
+            <datalist id="cat-suggestions-tx">
+                {% for c in all_categories %}
+                    <option value="{{ c }}">
+                {% endfor %}
+            </datalist>
+
+            <label>Amount ($)</label>
+            <input type="number" name="amount" class="input" placeholder="150.00" min="0.01" step="0.01" required>
+
+            <button type="submit" class="btn modal-submit"><i class="fas fa-check"></i>Add Transaction</button>
+        </form>
+    </div>
+</div>
+
+<!-- =========================================
+     ANALYTICS 
+========================================= -->
+{% if active_page == 'analytics' %}
+<script>
+(function(){
+        // Monthly labels and values passed from Flask/Snowflake
+    const allLabels = {{ monthly_labels | tojson }};
+    const allIncome = {{ monthly_income_data | tojson }};
+    const allExpenses = {{ monthly_expense_data | tojson }};
+
+    const yearFilter = document.getElementById('analyticsYearFilter');
+    const monthFilter = document.getElementById('analyticsMonthFilter');
+
+    const incomeValue = document.getElementById('analyticsIncomeValue');
+    const expenseValue = document.getElementById('analyticsExpenseValue');
+    const savingsRateValue = document.getElementById('analyticsSavingsRateValue');
+
+    const pageChart = new Chart(document.getElementById('pageChart').getContext('2d'), {
+        type: 'bar',
+        data: {
+            labels: [],
+            datasets: [
+                {
+                    label: 'Income',
+                    data: [],
+                    backgroundColor: 'rgba(22,163,74,0.72)',
+                    borderRadius: 8
+                },
+                {
+                    label: 'Expenses',
+                    data: [],
+                    backgroundColor: 'rgba(109,77,247,0.72)',
+                    borderRadius: 8
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    labels: {
+                        font: {
+                            family: 'Inter'
+                        }
+                    }
+                }
+            },
+            scales: {
+                x: {
+                    ticks: {
+                        font: {
+                            family: 'Inter'
+                        }
+                    }
+                },
+                y: {
+                    ticks: {
+                        callback: v => '$' + Number(v).toLocaleString(),
+                        font: {
+                            family: 'Inter'
+                        }
+                    }
+                }
+            }
+        }
+    });
+
+    function getYear(label){
+        const match = String(label).match(/\d{4}/);
+        return match ? match[0] : '';
+    }
+
+    function getMonthName(label){
+        return String(label).replace(/\d{4}/, '').trim();
+    }
+
+    const years = [...new Set(allLabels.map(label => getYear(label)).filter(Boolean))];
+
+    yearFilter.innerHTML = '';
+
+    years.forEach(year => {
+        const option = document.createElement('option');
+        option.value = year;
+        option.textContent = year;
+        yearFilter.appendChild(option);
+    });
+
+    function updateMonthOptions(selectedYear){
+        monthFilter.innerHTML = '';
+
+        const allOption = document.createElement('option');
+        allOption.value = 'all';
+        allOption.textContent = 'All Months';
+        monthFilter.appendChild(allOption);
+
+        allLabels.forEach((label, index) => {
+            if(getYear(label) === selectedYear){
+                const option = document.createElement('option');
+                option.value = index;
+                option.textContent = getMonthName(label);
+                monthFilter.appendChild(option);
+            }
+        });
+    }
+
+ // Updates analytics cards and chart based on selected year/month
+    function updateAnalytics(){
+        const selectedYear = yearFilter.value;
+        const selectedMonth = monthFilter.value;
+
+        let labels = [];
+        let income = [];
+        let expenses = [];
+
+        allLabels.forEach((label, index) => {
+            const sameYear = getYear(label) === selectedYear;
+            const sameMonth = selectedMonth === 'all' || String(index) === selectedMonth;
+
+            if(sameYear && sameMonth){
+                labels.push(label);
+                income.push(Number(allIncome[index] || 0));
+                expenses.push(Number(allExpenses[index] || 0));
+            }
+        });
+
+        const totalIncome = income.reduce((sum, val) => sum + val, 0);
+        const totalExpenses = expenses.reduce((sum, val) => sum + val, 0);
+
+        const savingsRate = totalIncome > 0
+            ? (((totalIncome - totalExpenses) / totalIncome) * 100).toFixed(1)
+            : '0.0';
+
+        incomeValue.textContent = '$' + totalIncome.toLocaleString(undefined, {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2
+        });
+
+        expenseValue.textContent = '$' + totalExpenses.toLocaleString(undefined, {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2
+        });
+
+        savingsRateValue.textContent = savingsRate + '%';
+
+        pageChart.data.labels = labels;
+        pageChart.data.datasets[0].data = income;
+        pageChart.data.datasets[1].data = expenses;
+        pageChart.update();
+    }
+
+    yearFilter.addEventListener('change', function(){
+        updateMonthOptions(this.value);
+        updateAnalytics();
+    });
+
+    monthFilter.addEventListener('change', function(){
+        updateAnalytics();
+    });
+
+    const latestYear = years[years.length - 1];
+
+    if(latestYear){
+        yearFilter.value = latestYear;
+        updateMonthOptions(latestYear);
+        updateAnalytics();
+    }
+})();
+</script>
+
+{% endif %}
+
+<!-- =========================================
+     PREDICTION CHART 
+========================================= -->
+<script>
+(function(){
+    // Data passed from Flask for prediction charts
+    const labels = {{ monthly_labels | tojson }};
+    const expData = {{ monthly_expense_data | tojson }};
+    const incData = {{ monthly_income_data | tojson }};
+    const savData = incData.map((v,i) => v - expData[i]);
+    const predExp = {{ predicted_expense or 0 }};
+    const predSav = {{ predicted_savings.next_month if predicted_savings else 0 }};
+    const recentCount = 6;
+
+const recentLabels = labels.slice(-recentCount);
+const recentExpData = expData.slice(-recentCount);
+const recentSavData = savData.slice(-recentCount);
+
+const extLabels = [...recentLabels, 'Next Month'];
+const extExp = [...recentExpData, predExp];
+const extSav = [...recentSavData, predSav];
+    const baseOpts = (yLabel) => ({
+        responsive:true, maintainAspectRatio:false,
+        plugins:{ legend:{display:false} },
+        scales:{
+            x:{ ticks:{ font:{family:'Inter'} } },
+            y:{ ticks:{ callback: v => '$'+v.toLocaleString(), font:{family:'Inter'} }, title:{display:true,text:yLabel} }
+        }
+    });
+    const combinedChart = document.getElementById('combinedPredictionChart');
+
+if(combinedChart){
+    new Chart(combinedChart.getContext('2d'),{
+        type:'line',
+
+        data:{
+            labels:extLabels,
+
+            datasets:[
+                {
+                    label:'Expenses',
+                    data:extExp,
+                    borderColor:'#e11d48',
+                    backgroundColor:'rgba(225,29,72,0.10)',
+                    fill:true,
+                    borderWidth:3,
+                    tension:0.4,
+                    pointRadius:4
+                },
+
+                {
+                    label:'Savings',
+                    data:extSav,
+                    borderColor:'#4f46e5',
+                    backgroundColor:'rgba(79,70,229,0.10)',
+                    fill:true,
+                    borderWidth:3,
+                    tension:0.4,
+                    pointRadius:4
+                }
+            ]
+        },
+
+        options:{
+            responsive:true,
+            maintainAspectRatio:false,
+
+            plugins:{
+                legend:{
+                    position:'top'
+                }
+            },
+
+            scales:{
+                y:{
+                    ticks:{
+                        callback:v => '$'+v.toLocaleString()
+                    }
+                }
+            }
+        }
+    });
+}
+
+})();
+</script>
+
+<!-- =========================================
+     AI ASSISTANT 
+========================================= -->
+{% if active_page == 'ai-assistant' %}
+<script>
+// AI Insights auto-generation
+async function loadAIInsights(){
+    const container = document.getElementById('aiInsightsContainer');
+    if(!container) return;
+    const fallbackInsights = [
+        'Compare your highest category against the monthly guardrail before adding new discretionary spending.',
+        'Review recurring bills first because small subscriptions can quietly raise the baseline.',
+        'Keep next month savings positive by trimming the top flexible expense category.',
+        'Use the predicted expense chart to spot whether your next month forecast is above recent history.',
+        'Check budget alerts weekly so overspending gets corrected before month end.',
+        'Export transactions after major edits to keep a backup of the ledger.'
+    ];
+    const icons = ['fa-lightbulb','fa-piggy-bank','fa-chart-line','fa-triangle-exclamation','fa-calendar-check','fa-shield-halved'];
+    const colors = ['#f6f3ff','#f0fdf4','#fff7ed','#eff6ff','#fdf2f8','#ecfeff'];
+    const textColors = ['#423262','#14532d','#7c2d12','#1e3a5f','#831843','#164e63'];
+    const accentColors = ['#6d4df7','#16a34a','#f97316','#4f46e5','#db2777','#0e7490'];
+    const renderInsights = (items) => {
+        container.style.gridTemplateColumns = 'repeat(auto-fill,minmax(280px,1fr))';
+        container.innerHTML = items.slice(0, 6).map((line,i) =>
+            `<div style="padding:18px;border-radius:16px;background:${colors[i%colors.length]};color:${textColors[i%textColors.length]};font-size:13px;line-height:1.65;border:1px solid rgba(0,0,0,0.05);">
+                <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px;">
+                    <span style="width:30px;height:30px;border-radius:9px;background:${accentColors[i%accentColors.length]};display:grid;place-items:center;color:white;font-size:13px;flex:0 0 auto;">
+                        <i class="fas ${icons[i%icons.length]}"></i>
+                    </span>
+                    <strong style="font-size:12px;font-weight:800;color:${accentColors[i%accentColors.length]};text-transform:uppercase;letter-spacing:0.5px;">Insight ${i+1}</strong>
+                </div>
+                ${line}
+            </div>`
+        ).join('');
+    };
+    try {
+        const res = await fetch('/api/ai-chat', {
+            method:'POST',
+            headers:{'Content-Type':'application/json'},
+            body: JSON.stringify({
+                message: 'Give me 6 concise AI financial insights about my spending. Format each as a single practical sentence.',
+                scope: 'month'
+            })
+        });
+        const data = await res.json();
+        const reply = data.reply || '';
+        const lines = reply
+            .split(/\n|(?=\d+\.\s)/)
+            .map(line => line.replace(/^\s*[-*\d.)]+\s*/, '').trim())
+            .filter(Boolean);
+        renderInsights([...lines, ...fallbackInsights].slice(0, 6));
+    } catch(e) {
+        renderInsights(fallbackInsights);
+    }
+}
+loadAIInsights();
+
+
+</script>
+{% endif %}
+
+<style>
+.fab-btn{
+    position:fixed;bottom:28px;right:28px;z-index:9000;
+    width:58px;height:58px;border-radius:50%;border:0;cursor:pointer;
+    background:linear-gradient(135deg,#6d4df7,#a64dff);
+    box-shadow:0 14px 36px rgba(109,77,247,0.42);
+    color:white;font-size:22px;display:grid;place-items:center;
+    transition:transform 0.2s ease;
+}
+.fab-btn:hover{ transform:scale(1.08); }
+.chatbot-panel{
+    position:fixed;bottom:100px;right:28px;z-index:8999;
+    width:340px;
+    background:rgba(255,255,255,0.96);
+    backdrop-filter:blur(18px);
+    border:1px solid rgba(109,77,247,0.18);
+    border-radius:22px;
+    box-shadow:0 28px 80px rgba(44,32,104,0.26);
+    display:flex;flex-direction:column;overflow:hidden;
+    transform:translateY(20px) scale(0.96);opacity:0;pointer-events:none;
+    transition:all 0.24s cubic-bezier(0.34,1.56,0.64,1);
+}
+.chatbot-panel.open{ opacity:1;transform:translateY(0) scale(1);pointer-events:auto; }
+.chatbot-header{
+    padding:16px 18px;background:linear-gradient(135deg,#6d4df7,#a64dff);
+    display:flex;align-items:center;gap:10px;color:white;
+}
+.chatbot-header strong{ flex:1;font-size:15px; }
+.chatbot-header button{ background:none;border:0;color:white;cursor:pointer;font-size:16px; }
+.chatbot-messages{
+    overflow-y:auto;padding:14px;display:flex;flex-direction:column;gap:10px;
+    min-height:200px;max-height:300px;
+}
+.chatbot-msg-user{
+    background:linear-gradient(135deg,#6d4df7,#8b5cf6);color:white;
+    padding:9px 13px;border-radius:14px 14px 4px 14px;
+    font-size:13px;max-width:85%;align-self:flex-end;
+}
+.chatbot-msg-bot{
+    background:#f6f3ff;color:#423262;
+    padding:9px 13px;border-radius:14px 14px 14px 4px;
+    font-size:13px;max-width:90%;
+}
+.chatbot-quick-prompts{ display:flex;flex-wrap:wrap;gap:6px;padding:0 14px 10px; }
+.quick-prompt{
+    padding:5px 10px;border-radius:999px;border:1px solid rgba(109,77,247,0.25);
+    background:#f6f3ff;color:#5b35d5;font-size:11px;font-weight:700;cursor:pointer;
+}
+.chatbot-input-row{ padding:12px 14px;border-top:1px solid var(--line);display:flex;gap:8px; }
+.chatbot-input-row input{
+    flex:1;height:38px;border:1px solid var(--line);border-radius:10px;
+    padding:0 12px;outline:0;font:inherit;font-size:13px;background:#fff;
+}
+.chatbot-input-row button{
+    height:38px;width:38px;border:0;border-radius:10px;cursor:pointer;
+    background:linear-gradient(135deg,#6d4df7,#8b5cf6);color:white;font-size:15px;
+}
+body.dark-mode{
+    background:
+        radial-gradient(circle at top left, rgba(109,77,247,0.20), transparent 34%),
+        linear-gradient(135deg,#080b14 0%,#111827 55%,#1e1b2e 100%);
+    color:#f8fafc;
+}
+
+body.dark-mode .shell,
+body.dark-mode .card,
+body.dark-mode .panel,
+body.dark-mode .sidebar,
+body.dark-mode .btn-secondary,
+body.dark-mode .stat-card,
+body.dark-mode .mini-card,
+body.dark-mode .tip,
+body.dark-mode .input-wrap,
+body.dark-mode .search-box,
+body.dark-mode .select-input{
+    background:rgba(255,255,255,0.06);
+    border-color:rgba(255,255,255,0.12);
+    color:#f8fafc;
+}
+
+body.dark-mode h1,
+body.dark-mode h2,
+body.dark-mode h3,
+body.dark-mode strong,
+body.dark-mode label{
+    color:#f8fafc;
+}
+
+body.dark-mode .muted,
+body.dark-mode .eyebrow,
+body.dark-mode p,
+body.dark-mode span{
+    color:#cbd5e1;
+}
+
+body.dark-mode input,
+body.dark-mode select,
+body.dark-mode textarea{
+    background:rgba(15,23,42,0.92);
+    border-color:rgba(255,255,255,0.14);
+    color:#f8fafc;
+}
+
+body.dark-mode input::placeholder,
+body.dark-mode textarea::placeholder{
+    color:#94a3b8;
+}
+
+body.dark-mode .nav-item{
+    color:#cbd5e1;
+}
+
+body.dark-mode .nav-item:hover,
+body.dark-mode .nav-item.active{
+    color:#ffffff;
+}
+
+body.dark-mode .row,
+body.dark-mode .transaction-row{
+    border-color:rgba(255,255,255,0.12);
+}
+</style>
+
+<button class="fab-btn" id="fabBtn" title="Ask FinSight AI"><i class="fas fa-robot"></i></button>
+<div class="chatbot-panel" id="chatbotPanel">
+    <div class="chatbot-header">
+        <i class="fas fa-robot"></i>
+        <strong>FinSight AI</strong>
+        <button onclick="document.getElementById('chatbotPanel').classList.remove('open')"><i class="fas fa-xmark"></i></button>
+    </div>
+    <div class="chatbot-messages" id="floatMessages">
+        <div class="chatbot-msg-bot">Hi! Ask me anything about your finances.</div>
+    </div>
+    <div class="chatbot-quick-prompts">
+        <button class="quick-prompt" onclick="floatPrompt('How can I save more?')">Save more?</button>
+        <button class="quick-prompt" onclick="floatPrompt('Where am I overspending?')">Overspending?</button>
+        <button class="quick-prompt" onclick="floatPrompt('What is my biggest expense?')">Top expense</button>
+    </div>
+    <div class="chatbot-input-row">
+        <input type="text" id="floatInput" placeholder="Ask about your finances...">
+        <button onclick="sendFloatAI()"><i class="fas fa-paper-plane"></i></button>
+    </div>
+</div>
+<script>
+document.getElementById('fabBtn').addEventListener('click', () => {
+    document.getElementById('chatbotPanel').classList.toggle('open');
+});
+function floatPrompt(t){ document.getElementById('floatInput').value=t; sendFloatAI(); }
+async function sendFloatAI(){
+    const input=document.getElementById('floatInput');
+    const messages=document.getElementById('floatMessages');
+    const msg=input.value.trim();
+    if(!msg) return;
+    const userDiv=document.createElement('div');
+    userDiv.className='chatbot-msg-user';userDiv.textContent=msg;
+    messages.appendChild(userDiv);input.value='';
+    const botDiv=document.createElement('div');
+    botDiv.className='chatbot-msg-bot';botDiv.innerHTML='<i class="fas fa-spinner fa-spin"></i> Thinking...';
+    messages.appendChild(botDiv);messages.scrollTop=messages.scrollHeight;
+    try{
+        const res=await fetch('/api/ai-chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({message:msg,scope:'month'})});
+        const data=await res.json();
+        botDiv.textContent=data.reply||'Sorry, no response.';
+    }catch(e){ botDiv.textContent='AI unavailable right now.'; }
+    messages.scrollTop=messages.scrollHeight;
+}
+document.getElementById('floatInput').addEventListener('keydown',e=>{ if(e.key==='Enter'){e.preventDefault();sendFloatAI();} });
+</script>
+<script>
+(function () {
+    const savedTheme = localStorage.getItem('finsight-theme');
+
+    if (savedTheme === 'dark') {
+        document.body.classList.add('dark-mode');
+    }
+
+    const themeToggle = document.getElementById('themeToggle');
+
+    if (themeToggle) {
+        themeToggle.addEventListener('click', function () {
+            document.body.classList.toggle('dark-mode');
+
+            if (document.body.classList.contains('dark-mode')) {
+                localStorage.setItem('finsight-theme', 'dark');
+            } else {
+                localStorage.setItem('finsight-theme', 'light');
+            }
+        });
+    }
+})();
+
+async function saveBudgetApi(event) {
+    event.preventDefault();
+
+    const form = document.getElementById("budgetForm");
+    const formData = new FormData(form);
+
+    try {
+        const response = await fetch("/api/budgets", {
+            method: "POST",
+            body: formData
+        });
+
+        const result = await response.json();
+
+        if (result.success) {
+            alert(result.message);
+            window.location.reload();
+        } else {
+            alert(result.message || "Unable to save budget.");
+        }
+    } catch (error) {
+        console.error("Budget API error:", error);
+        alert("Something went wrong while saving budget.");
+    }
+}
+</script>
+
+<script>
+document.addEventListener('click', function(event){
+    const modal = document.getElementById('transactionModal');
+    if(modal && event.target === modal){
+        closeTransactionModal();
+    }
+});
+
+document.addEventListener('keydown', function(event){
+    if(event.key === 'Escape'){
+        closeTransactionModal();
+    }
+});
+</script>
+
+</body>
+</html>
